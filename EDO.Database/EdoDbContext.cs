@@ -4,8 +4,6 @@ namespace EDO.Database;
 
 public class EdoDbContext:DbContext
 {
-    public DbSet<Document> Documents { get; set; }
-
     public EdoDbContext()
     {
         Database.Migrate();
@@ -15,6 +13,14 @@ public class EdoDbContext:DbContext
     {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         Database.Migrate();
+    }
+    public DbSet<Document> Documents { get; set; }
+    public DbSet<DocumentType> DocumentTypes { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.Entity<Document>().HasOne(x => x.DocumentType).WithMany(x => x.Documents);
+        base.OnModelCreating(builder);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

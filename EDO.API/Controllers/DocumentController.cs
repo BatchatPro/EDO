@@ -7,117 +7,72 @@ namespace EDO.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class DocumentController : Controller
+public class DocumentsController : ControllerBase
 {
-    private readonly EdoDbContext _dbContext;
+    private readonly EdoDbContext _context;
 
-    public DocumentController(EdoDbContext dbContext)
+    public DocumentsController(EdoDbContext context)
     {
-        _dbContext = dbContext;
+        _context = context;
     }
 
-
-    // GET: api/Document/GetAll
+    // GET: api/Documents
     [HttpGet]
-    [Route("Document/GetDocuments")]
     public async Task<ActionResult<IEnumerable<Document>>> GetDocuments()
     {
-        if (_dbContext.Documents == null)
-        {
-            return NotFound();
-        }
-        return await _dbContext.Documents.ToListAsync();
+        return (_context.Documents == null) ? NotFound(): await _context.Documents.ToListAsync();
     }
 
-
-    // GET: api/Document/GetAll/5
-    [HttpGet]
-    [Route("Document/GetDocument{id:int}")]
+    // GET: api/Documents/5
+    [HttpGet("{id}")]
     public async Task<ActionResult<Document>> GetDocument(int id)
     {
-        if (_dbContext.Documents == null)
-        {
-            return NotFound();
-        }
-        var document = await _dbContext.Documents.FindAsync(id);
+        var document = await _context.Documents.FindAsync(id);
 
+        return (document == null) ? NotFound() : document;
+    }
+
+    // PUT: api/Documents
+    [HttpPut]
+    public async Task<IActionResult> PutDocument(Document document)
+    {
+        if(!DocumentExists(document.Id))
+            return NotFound($"Not Found element with this id: {document.Id}");
+        
+        _context.Documents.Update(document);
+        await _context.SaveChangesAsync();
+        
+        return Ok(document);
+    }
+
+    // POST: api/Documents
+    [HttpPost]
+    public async Task<ActionResult<Document>> PostDocument(Document document)
+    {
+        _context.Documents.Add(document);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetDocument), new { id = document.Id }, document);
+    }
+
+    // DELETE: api/Documents/5
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Document>> DeleteDocument(int id)
+    {
+        var document = await _context.Documents.FindAsync(id);
         if (document == null)
         {
-            return NotFound();
+            return NotFound($"Not Found Element with this id: {id}");
         }
 
-        return document;
-    }
-
-
-    // POST: api/Documents/GetAll/1
-    [HttpPost]
-    [Route("Document/PostMovie")]
-    public async Task<ActionResult<Document>> PostMovie(Document document)
-    {
-        _dbContext.Documents.Add(document);
-        await _dbContext.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetDocuments), new { id = document.Id }, document);
-    }
-
-
-    // PUT: api/Document/GetAll/4
-    [HttpPut]
-    [Route("Document/PutDocument{id:int}")]
-    public async Task<IActionResult> PutDocument(int id, Document document)
-    {
-        if (id != document.Id)
-        {
-            return BadRequest();
-        }
-
-        _dbContext.Entry(document).State = EntityState.Modified;
-
-        try
-        {
-            await _dbContext.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!DocumentExists(id))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
-        }
+        _context.Documents.Remove(document);
+        await _context.SaveChangesAsync();
 
         return NoContent();
     }
 
-
-    // DELETE: api/Movies/5
-    [HttpDelete]
-    [Route("Document/DeleteDocument{id:int}")]
-    public async Task<IActionResult> DeleteDocument(int id)
+    private bool DocumentExists(int id)
     {
-        if (_dbContext.Documents == null)
-        {
-            return NotFound();
-        }
-
-        var movie = await _dbContext.Documents.FindAsync(id);
-        if (movie == null)
-        {
-            return NotFound();
-        }
-
-        _dbContext.Documents.Remove(movie);
-        await _dbContext.SaveChangesAsync();
-
-        return NoContent();
-    }
-
-    private bool DocumentExists(long id)
-    {
-        return (_dbContext.Documents?.Any(e => e.Id == id)).GetValueOrDefault();
+        return _context.Documents.Any(e => e.Id == id);
     }
 }
