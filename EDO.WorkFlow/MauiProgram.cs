@@ -1,4 +1,5 @@
 ﻿using EDO.WorkFlow.Data;
+using EDO.WorkFlow.Services;
 using Microsoft.Extensions.Logging;
 
 namespace EDO.WorkFlow
@@ -21,7 +22,7 @@ namespace EDO.WorkFlow
 		builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
 #endif
-
+            builder.Services.AddSingleton<IDocumentService, DocumentService>();
             builder.Services.AddSingleton<WeatherForecastService>();
 
             return builder.Build();
