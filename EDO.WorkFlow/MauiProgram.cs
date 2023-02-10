@@ -1,6 +1,7 @@
 ﻿using EDO.WorkFlow.Data;
 using EDO.WorkFlow.Services;
 using Microsoft.Extensions.Logging;
+using DevExpress.Blazor;
 
 namespace EDO.WorkFlow
 {
@@ -24,6 +25,7 @@ namespace EDO.WorkFlow
 #endif
             builder.Services.AddSingleton<IDocumentService, DocumentService>();
             builder.Services.AddSingleton<WeatherForecastService>();
+            builder.Services.AddDevExpressBlazor(configure => configure.BootstrapVersion = BootstrapVersion.v5);
 
             return builder.Build();
         }
