@@ -5,7 +5,7 @@ namespace EDO.WorkFlow.Services;
 
 public class DocumentService: IDocumentService
 {
-    private string _baseUrl = "https://localhost:7127";
+    private string _baseUrl = "https://localhost:44369";
     public async Task<List<DocumentResponseModel>> GetAllDocuments()
     {
         var returnResponse = new List<DocumentResponseModel>();
