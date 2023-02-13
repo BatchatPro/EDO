@@ -1,7 +1,7 @@
 ﻿@page "/login"
 @using System.Collections.ObjectModel
 
-@*<DxButton Text="Add New Day"
+<DxButton Text="Add New Day"
           Click="(e) => AddNewForecast()" />
 <p />
 <DxGrid Data="@WeatherForecastData"
@@ -15,7 +15,7 @@
         <DxGridDataColumn FieldName="TemperatureF" Caption="@("Temp. (\x2109)")" />
     </Columns>
 
-</DxGrid>*@
+</DxGrid>
 
 @code {
     public class WeatherForecast

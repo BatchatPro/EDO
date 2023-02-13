@@ -19,8 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDO.Repository", "EDO.Repos
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDO.WorkFlow", "EDO.WorkFlow\EDO.WorkFlow.csproj", "{7FB9BAA0-E740-4E9C-812A-8DE06EBD04FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDO.ProApp", "EDO.ProApp\EDO.ProApp.csproj", "{3B3CA464-4012-46C6-AA70-62E07E3FE355}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,12 +59,6 @@ Global
 		{7FB9BAA0-E740-4E9C-812A-8DE06EBD04FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FB9BAA0-E740-4E9C-812A-8DE06EBD04FF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7FB9BAA0-E740-4E9C-812A-8DE06EBD04FF}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{3B3CA464-4012-46C6-AA70-62E07E3FE355}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B3CA464-4012-46C6-AA70-62E07E3FE355}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B3CA464-4012-46C6-AA70-62E07E3FE355}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{3B3CA464-4012-46C6-AA70-62E07E3FE355}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B3CA464-4012-46C6-AA70-62E07E3FE355}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B3CA464-4012-46C6-AA70-62E07E3FE355}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
