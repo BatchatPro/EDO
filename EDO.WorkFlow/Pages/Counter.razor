@@ -1,16 +1,19 @@
 ﻿@page "/counter"
+@inject Toolbelt.Blazor.I18nText.I18nText I18nText
 
-<h1>Counter</h1>
 
-<p role="status">Current count: @currentCount</p>
+<h1>@Localized["Name"]</h1>
+<h1>@Localized["Login"]</h1>
+<h1>@Localized["Newpassword"]</h1>
+<h1>@Localized["Logout"]</h1>
+<h1>@Localized["Password"]</h1>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
-@code {
-    private int currentCount = 0;
+@code{
+    I18nText.Localized Localized = new I18nText.Localized();
 
-    private void IncrementCount()
+    protected override async Task OnInitializedAsync()
     {
-        currentCount++;
+        Localized = await I18nText.GetTextTableAsync<I18nText.Localized>(this);
     }
 }

@@ -1,0 +1,38 @@
+﻿@using Frontend;
+@inject Toolbelt.Blazor.I18nText.I18nText I18nText
+@attribute [Authorize]
+
+<div class="dropdown">
+    <a href="/" type="button" data-bs-toggle="dropdown" class="mx-2">
+        <img src="css/icons/translate.svg" style="border-radius:6px;" class="bg-white p-1">
+    </a>
+    <ul class="dropdown-menu p-0" style="border-radius: 10px; background-color: #94B49F;" aria-labelledby="navbarDarkDropdownMenuLink">
+        @foreach (var item in SupportedLanguage.List)
+        {
+            <li><a class="dropdown-item" style="border-radius: 10px;" type="button" @onclick="() => OnChangeLanguage(item.LangCode)">@item.Caption (@item.LangCode)</a></li>
+        }
+    </ul>
+</div>
+
+@code
+{
+    SupportedLanguage _supportedLanguage = new SupportedLanguage("Русский", "ru");
+    SupportedLanguage supportedLanguage
+    {
+        get => _supportedLanguage;
+        set
+        {
+            _supportedLanguage = value;
+            OnChangeLanguage(supportedLanguage.LangCode);
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var currentLanguge = await this.I18nText.GetCurrentLanguageAsync();
+        supportedLanguage = SupportedLanguage.List.FirstOrDefault();
+    }
+
+    private Task OnChangeLanguage(string Code) => this.I18nText.SetCurrentLanguageAsync(Code);
+}

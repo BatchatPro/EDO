@@ -1,6 +1,7 @@
 ﻿using EDO.WorkFlow.Data;
 using EDO.WorkFlow.Services;
 using Microsoft.Extensions.Logging;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 //using DevExpress.Blazor;
 
 namespace EDO.WorkFlow
@@ -23,8 +24,14 @@ namespace EDO.WorkFlow
 		builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
 #endif
+            builder.Services.AddAuthorizationCore(); // This is the core functionality
+
+            builder.Services.AddBlazorWebView();
+            builder.Services.AddI18nText();
+
             builder.Services.AddSingleton<IDocumentService, DocumentService>();
             builder.Services.AddSingleton<WeatherForecastService>();
+
             //builder.Services.AddDevExpressBlazor(configure => configure.BootstrapVersion = BootstrapVersion.v5);
 
             return builder.Build();
