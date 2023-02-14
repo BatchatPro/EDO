@@ -1,52 +1,158 @@
 ﻿@page "/login"
-@using System.Collections.ObjectModel
+@using EDO.WorkFlow.Models
+@layout LoginLayout
+@inject NavigationManager NavigationManager
+@inherits LayoutComponentBase
+@inject NavigationManager Navigation;
+@inject CustomAuthenticationStateProvider AuthStateProvider;
+@inject Toolbelt.Blazor.I18nText.I18nText I18nText
 
-<DxButton Text="Add New Day"
-          Click="(e) => AddNewForecast()" />
-<p />
-<DxGrid Data="@WeatherForecastData"
-        PagerNavigationMode="PagerNavigationMode.InputBox"
-        PageSizeSelectorVisible="true"
-        PageSizeSelectorAllRowsItemVisible="true"
-        PageSizeSelectorItems="@(new int[] { 5,10,20 })">
-    <Columns>
-        <DxGridDataColumn FieldName="Date" DisplayFormat="D" />
-        <DxGridDataColumn FieldName="TemperatureC" Caption="@("Temp. (\x2103)")" />
-        <DxGridDataColumn FieldName="TemperatureF" Caption="@("Temp. (\x2109)")" />
-    </Columns>
+@*<div class="alert alert-info">
+    UserName = "batchat_pro"    Password = "12345678"
+</div>*@
 
-</DxGrid>
+<EditForm Model="@loginModel" OnValidSubmit="@HandleValidSubmit" class="vh-100 bg-image images">
+    <div class="container vh-100 ">
+        <div class="row d-flex justify-content-center align-items-center h-100" style="">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-4">
+                <div class="card shadow-2-strong rounded">
+                    <div class="card-header btn btn-primary rounded-top  img-fluid" style="/*background-color:#072090 !important*/ background-image: linear-gradient( to right, #0ba360, #3cba92, #30dd8a, #2bb673 );  ">
+                        <img src="/Image/Frame.svg" />
+                    </div>
+                    <div class="card-body p-5 text-center">
+
+                        <h4 style="color: white; text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue; " class="mb-5">@Localized["LOGIN"]</h4>
+                        <div class="alert alert-danger" hidden="@loginModel.LoginFailureHidden">
+                            Invalid login attempt, please correct and try again.
+                        </div>
+                        <div class="form-outline mb-4">
+                            <label class="form-label text-start" for="typeEmailX-2">@Localized["Username"]</label><br>
+                            <InputText type="text" id="typeEmailX-2" @bind-Value="loginModel.Username" class="form-control form-control-lg" style="/*box-shadow: 0 0 5pt 0.5pt #D3D3D3;*/ box-shadow: 0 4px 15px 0 rgba(23, 168, 108, 0.75); border-radius: .9rem !important;" />
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <label class="form-label " for="typePasswordX-2">@Localized["Password"] </label><br>
+                            <InputText type="password" id="typePasswordX-2" @bind-Value="loginModel.Password" class="form-control form-control-lg" style="/*box-shadow: 0 0 5pt 0.5pt #D3D3D3;*/ box-shadow: 0 4px 15px 0 rgba(23, 168, 108, 0.75); border-radius: .9rem !important;" />
+                        </div>
+                        <Languages />
+                        <button class="bn632-hover bn22" type="submit">
+                            Login
+                        </button>
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                    </div>
+                    <div class="card-footer text-center bg-primary rounded-bottom" style="/*background-color:#072090 !important;*/  background-image: linear-gradient( to right, #0ba360, #3cba92, #30dd8a, #2bb673 );  text-align: center!important;">
+                        <p class="text-center" style="color: white !important; text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue !important;">@Localized["Подробнеепродокуменооборот"]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
 
 @code {
-    public class WeatherForecast
+    private LoginModel loginModel = new();
+    private AccountService accountService = new();
+    I18nText.Localized Localized = new I18nText.Localized();
+
+    protected override async Task OnInitializedAsync()
     {
-        public DateTime Date { get; set; }
-        public int TemperatureC { get; set; }
-        public double TemperatureF => Math.Round((TemperatureC * 1.8 + 32), 2);
-        public string Forecast { get; set; }
-        public string CloudCover { get; set; }
-        public bool Precipitation { get; set; }
+        Localized = await I18nText.GetTextTableAsync<I18nText.Localized>(this);
     }
 
-    int DayCount { get; set; } = 0;
-    ObservableCollection<WeatherForecast> WeatherForecastData { get; set; }
-    static readonly Random Rnd = new Random();
-
-    protected override void OnInitialized()
+    private async Task HandleValidSubmit()
     {
-        WeatherForecastData = new ObservableCollection<WeatherForecast>();
-        foreach (var date in Enumerable.Range(1, 5).Select(i => DateTime.Now.Date.AddDays(i)))
-        {
-            AddNewForecast();
-        }
-    }
+        //Valiate user acount
+        var successful = accountService.ValidateLogin(out string jwtToken, loginModel);
 
-    void AddNewForecast()
-    {
-        WeatherForecastData.Add(new WeatherForecast()
-            {
-                Date = DateTime.Now.Date.AddDays(++DayCount),
-                TemperatureC = Rnd.Next(10, 20)
-            });
+        //Not successful, don't need to do anything
+        if (!successful)
+            return;
+    
+        //Call login and recirect
+        await AuthStateProvider.Login(jwtToken);
+        Navigation.NavigateTo(""); //Root URL
     }
 }
+
+
+
+<style>
+    .text-center {
+        text-align: center;
+    }
+
+    .bg-image {
+        background-image: url("Image/Frame1.png");
+    }
+
+    .btn-primary {
+        background-color: white;
+        color: #0b5ed7;
+    }
+
+    .btn-primary1{
+        color: black;
+        background-color: white;
+    }
+
+    .btn-primary1:hover{
+        color:black;
+        background-color: #0b5ed7;
+    }
+
+    .form-outline i {
+        padding: 8px 16px;
+        color: #0cd6a8 !important;
+    }
+
+     .img-fluid1 {
+         max-width: 100%;
+         height: auto;
+     }
+
+    .form-label {
+        float: left;
+    }
+
+    .images {
+        padding-right: 0px !important;
+        padding-left: 0px !important;
+    }
+
+
+
+.bn632-hover {
+    width: 220px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    margin: 20px;
+    height: 55px;
+    text-align: center;
+    border: none;
+    background-size: 300% 100%;
+    border-radius: .9rem !important;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+}
+
+    .bn632-hover:hover {
+        background-position: 100% 0;
+        -o-transition: all .4s ease-in-out;
+        -webkit-transition: all .4s ease-in-out;
+        transition: all .4s ease-in-out;
+    }
+
+    .bn632-hover:focus {
+        outline: none;
+    }
+
+    .bn632-hover.bn22 {
+        background-image: linear-gradient( to right, #0ba360, #3cba92, #30dd8a, #2bb673 );
+        box-shadow: 0 4px 15px 0 rgba(23, 168, 108, 0.75);
+    }
+</style >
+ 

@@ -1,0 +1,53 @@
+﻿@page "/pending"
+@using DevExpress.Entity.Model;
+
+@*<div id="dropdown-resizing-target-container">
+    <DxButton
+        Click="() => IsOpen = !IsOpen"
+        RenderStyle="@ButtonRenderStyle.Secondary">i</DxButton>
+</div>
+<DxDropDown
+    @bind-IsOpen="@IsOpen"
+    AllowResize="true"
+    CloseMode="DropDownCloseMode.Close"
+    PreventCloseOnPositionTargetClick="true"
+    PositionMode="DropDownPositionMode.Bottom"
+    PositionTarget="#dropdown-resizing-target-container"
+    RestrictionTarget="#Navigation-DropDown-Resizing"
+    HeaderText="Edit Contact"
+    FooterVisible="true"
+    MinHeight="100"
+    MaxHeight="200"
+    Width="max(25vw, 800px)">
+   
+    <FooterTextTemplate>
+        <DxButton CssClass="popup-button my-1 ms-2" RenderStyle="ButtonRenderStyle.Primary" Text="OK" Click="@context.CloseCallback" />
+        <DxButton CssClass="popup-button my-1 ms-2" RenderStyle="ButtonRenderStyle.Secondary" Text="Cancel" Click="@context.CloseCallback"/>
+    </FooterTextTemplate>
+</DxDropDown>*@
+    
+
+@code {
+    bool IsOpen { get; set; } = false;
+}
+
+
+@*
+<div id="dropdown-overview-target-container">
+    <DxButton Click="() => IsOpen = !IsOpen"
+              RenderStyle="@ButtonRenderStyle.Secondary">i</DxButton>
+</div>
+<DxDropDown @bind-IsOpen="@IsOpen"
+            HeaderVisible="true"
+            HeaderText="Header"
+            PositionMode="DropDownPositionMode.Bottom"
+            Width="max(25vw, 250px)"
+            PositionTarget="#dropdown-overview-target-container"
+            RestrictionTarget="#Navigation-DropDown-Overview"
+            CloseMode="DropDownCloseMode.Close"
+            PreventCloseOnPositionTargetClick="true">
+</DxDropDown>
+
+@code {
+    bool IsOpen { get; set; } = false;
+}*@

@@ -1,0 +1,299 @@
+﻿@page "/write_letter"
+@attribute [Authorize]
+@inject Toolbelt.Blazor.I18nText.I18nText I18nText
+@inject IJSRuntime JS
+@inherits LayoutComponentBase
+@using EDO.WorkFlow.FillingOutForm;
+
+<div class="Form">
+    <div class="container1 float-lg-start">
+        <EditForm Model="@fillingutformDTO" action="">
+            <p style="text-align:center">@Localized["Formforfillingoutaletter"]</p>
+            <div class="row1">
+                <div class="col-25">
+                    <label for="Executor">@Localized["Executor"]</label>
+                </div>
+                <div class="col-65">
+                    <InputText style="background-color: rgb(204, 204, 204)" type="text" id="Executor" @bind-Value="@fillingutformDTO.Executor" required autocomplete="off" />
+                </div>
+            </div>
+            <div class="row1">
+                <div class="col-25">
+                    <label for="Confirming">@Localized["Confirming"]</label>
+                </div>
+                <div class="colPlus">
+                    <InputText type="text" id="Confirming" @bind-Value="@fillingutformDTO.Confirming" required autocomplete="off" />
+                </div>
+                <div class="icons2">
+                    <div class="icos1">
+                        <a href=""><img src="Image/icons8-plus-math-24.png" alt="telegram-app.png" style="color:black"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row1">
+                <div class="col-25">
+                    <label for="Checker">@Localized["Checker"]</label>
+                </div>
+                <div class="colPlus">
+                    <InputText type="text" id="Checker" @bind-Value="@fillingutformDTO.Checker" required autocomplete="off" />
+                </div>
+                <div class="icons2">
+                    <div class="icos1">
+                        <a href=""><img src="Image/icons8-plus-math-24.png" alt="telegram-app.png" style="color:black"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row1">
+                <div class="col-25">
+                    <label for="Towhom">@Localized["Towhom"]</label>
+                </div>
+                <div class="col-70">
+                    <InputTextArea @bind-Value="@fillingutformDTO.Towhom" />
+                </div>
+            </div>
+            <div style="text-align:center; padding-top: 10px">
+                <label for="Contentoftheletter">@Localized["Contentoftheletter"]</label>
+            </div>
+            <div class="row1">
+                <div class="col100">
+                    <InputTextArea style="height:50vh;" @bind-Value="@fillingutformDTO.Contentoftheletter" rows="20" cols="30" />
+                </div>
+            </div>
+            <button class="submit2" type="submit">Oтменить</button>
+            <button class="submit1" type="submit" onclick="@SubmitHTML">Отправить </button>
+        </EditForm>
+    </div>
+
+    <div class="container2 float-lg-end">
+        <p style="text-align:center; color: white;">Прототип готового письма </p>
+        <div class="A3">
+            <div style="height: 70px; display:flex; justify-content: space-around; margin-left: 15px; margin-top:  16px; padding: 15px;" class="row">
+                <div class="col-4"
+                     style="color: rgb(0, 51, 153); text-align: center; font-size: 12px; padding-top: 17px;padding-right: 15px;padding-bottom: 15px; padding-left: 23px; font-weight: bold">
+                    <div>QIMMATLI QOG'OZLARNING MARKAZIY DEPOZITARIYSI DAVLAT KORXONASI</div>
+                </div>
+                <div class="col-2">
+                    <img src="Image/Gerb1.jpg" alt="gerb" style="height: 100px; position: relative; padding-top: 15px;">
+                </div>
+                <div class="col-4"
+                     style="color: rgb(0, 51, 153); text-align: center; font-size: 12px; padding-top: 15px;padding-right: 19px;padding-bottom: 15px;padding-left: 3px; width: 25% !important; font-weight: bold">
+                    <div>STATE ENTERPRISE CENTRAL SECURITIES DEPOSITORY</div>
+                </div>
+            </div>
+            <div style="display:flex; justify-content: space-around;">
+                <div style="text-align: center; font-size: 9px; padding: 15px; padding: 31px 27px 0px 44px; width: 44%;">
+                    <div>100107, O'zbekiston Respublikasi, Toshkent shaxri, Mirzo-Ulug'bek tumani, Mustaqilik shoh ko'chasi, 107. </div>
+                </div>
+
+                <div style="text-align: center; font-size: 9px;padding: 31px 50px 0px 99px; width: 50%;">
+                    <div>107, Mustaqilik avenue, Tashkent city, 100170, Respublic of Uzbekistan</div>
+                </div>
+            </div>
+            <hr style="margin: 1px; border-top: 2px solid black; margin-left: 60px; margin-right: 60px;">
+            <hr style="margin: 3px; margin-left: 70px;margin-right: 70px; border-top: 2px solid black;">
+            <div>
+                <div>
+
+                    <div>
+                        <p style="padding-left: 260px; padding-top: 60px; padding-right: 40px; font-weight: bold">@fillingutformDTO.Towhom</p>
+                    </div>
+                    <p>@fillingutformDTO.Confirming</p>
+                    <div style="padding-left: 65px; padding-right: 40px; height:25vh;">
+                        <p>@fillingutformDTO.Contentoftheletter</p>
+                    </div>
+                    <div style="padding-left: 90px;">
+                        <p>Приложение: Техническое задание  на   листах </p>
+                    </div>
+
+                    <div style="padding-left: 90px; padding-top: 45px;">
+                        <p style="float: left; font-weight: bold">Генеральные директор</p>
+                        <p style="float: right; padding-right: 40px; font-weight: bold">@fillingutformDTO.Checker</p>
+                    </div>
+
+                    <div style="padding-left: 90px; padding-top: 45px;">
+                        <p style="float: left; font-size: 11px;">Исп:@fillingutformDTO.Executor"</p>
+                    </div>
+                    <div style="padding-left: 90px; padding-top: 45px;">
+                        <p style="float: left; font-size:12px;">Тел:71 276-47-10</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private FillingOutFormDTO fillingutformDTO = new();
+    I18nText.Localized Localized = new I18nText.Localized();
+    protected override async Task OnInitializedAsync()
+    {
+        Localized = await I18nText.GetTextTableAsync<I18nText.Localized>(this);
+    }
+    private async Task SubmitHTML()
+    {
+        var render = new IronPdf.ChromePdfRenderer();
+        var doc = render.RenderHtmlAsPdf($"<h1>{fillingutformDTO.Executor}</h1><h1>{fillingutformDTO.Confirming}</h1><h1>{fillingutformDTO.Checker}</h1><h1>{fillingutformDTO.Towhom}</h1><h1>{fillingutformDTO.Contentoftheletter}</h1>");
+        var fileName = "iron.pdf";
+        using var streamRef = new DotNetStreamReference(stream: doc.Stream);
+        await JS.InvokeVoidAsync("SubmitHTML", fileName, streamRef);
+    }
+}
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .row1 > * {
+        flex-shrink: 0;
+        width: 100%;
+        max-width: 100%;
+        padding-right: calc(var(--bs-gutter-x) * .5);
+        padding-left: 0px;
+        margin-top: var(--bs-gutter-y);
+    }
+
+    input[type=text], select, textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px 0px 0px 4px;
+        resize: vertical;
+    }
+
+    .PDF {
+        margin-top: 10px;
+        margin-left: 10px;
+        margin-right: 12px;
+        margin-bottom: 10px;
+    }
+
+    .icons2 {
+        width: 6%;
+        padding: 7px;
+        border: 1px solid #ccc;
+        border-radius: 0px 4px 4px 0px;
+        resize: vertical;
+    }
+
+    .icos1 {
+        height: 30px;
+        width: 30px;
+        background-color: rgb(140, 217, 179);
+        border-radius: 50%;
+        text-align: center;
+        border: 2px solid;
+        border-color: white;
+    }
+
+    .icons2 {
+        float: left;
+        background-color: rgb(140, 217, 179);
+        text-align: center;
+        padding: -1px;
+        margin-top: 6px;
+        padding-bottom: 11px;
+    }
+
+    label {
+        padding: 12px 12px 12px 0;
+        display: inline-block;
+    }
+
+    .submit1 {
+        background-color: #04AA6D;
+        color: white;
+        padding: 6px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        float: right;
+        margin-top: 15px;
+    }
+
+    .submit2 {
+        color: black;
+        padding: 6px 20px;
+        border: none;
+        cursor: pointer;
+        float: right;
+        margin-right: 11px;
+        background-color: rgb(230, 230, 230);
+        padding-top: 20px;
+    }
+
+    input[type=submit1]:hover {
+        background-color: #45a049;
+    }
+
+    .container1 {
+        background-color: rgb(230, 230, 230);
+        padding: 20px;
+        width: 50%;
+    }
+
+    .container2 {
+        background-color: rgb(77, 77, 77);
+        padding-top: 20px;
+        padding-right: 30px;
+        padding-bottom: 20px;
+        padding-left: 30px;
+        width: 50%;
+        height: 954px;
+    }
+
+    .col-25 {
+        float: left;
+        width: 25%;
+        margin-top: 6px;
+    }
+
+    .col-75 {
+        float: left;
+        width: 72%;
+        margin-top: 6px;
+    }
+
+    .colPlus {
+        float: left;
+        width: 66%;
+        margin-top: 6px;
+    }
+
+    .col100 {
+        float: left;
+        width: 95%;
+        margin-top: 6px;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .col-70 {
+        float: left;
+        width: 72%;
+        margin-top: 6px;
+    }
+
+    .col-65 {
+        float: left;
+        width: 72%;
+        margin-top: 6px;
+        background-color: rgb(179, 179, 179) hsl(0, 0%, 70%);
+    }
+
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .Form {
+        box-sizing: border-box;
+    }
+
+    .A3 {
+        background-color: white;
+        height: 87%;
+        width: 85%;
+        margin: 54px;
+    }
+</style>

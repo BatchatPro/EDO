@@ -1,6 +1,14 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject Toolbelt.Blazor.I18nText.I18nText I18nText
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">EDO.WorkFlow</a>
+        <a class="navbar-brand" href="/">
+            <div style="display:flex; justify-content: center; align-items:center;">
+                <img class="img-logo" src="image/CDLogo.svg "><span style="flex:4%;"></span>
+                <span style="font-size: 9px; white-space: normal; flex:77%">@Localized["CENTRAL_SECURITIES_DEPOSITORY_OF_UZBEKISTAN"]</span>
+            </div>
+        </a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -10,32 +18,82 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <nav class="flex-column">
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+            <NavLink class="nav-link rounded-7 d-flex justify-content-center" style="background-color: hsla(0, 0%, 89%, 1);" href="write_letter">
+                @Localized["WriteLetter"]
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All" style="padding-left:0 !important;">
+                <img src="css/icons/envelope-paper.svg" class="px-3"> @Localized["Inbox"]
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+            <NavLink class="nav-link" href="outgoing" style="padding-left:0 !important;">
+                <img src="css/icons/send-check.svg" class="px-3"> @Localized["Outgoing"]
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="login">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Login
+            <NavLink class="nav-link" href="draft" style="padding-left:0 !important;">
+                <img src="css/icons/pencil-square.svg" class="px-3"> @Localized["Draft"]
             </NavLink>
         </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="pending" style="padding-left:0 !important;">
+                <img src="css/icons/clock.svg" class="px-3"> @Localized["Pending"]
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="archive_of_letters" style="padding-left:0 !important;">
+                <img src="css/icons/arxiv.svg" class="px-3"> @Localized["Archive_of_letters"]
+            </NavLink>
+        </div>
+        @*
+        <AuthorizeView>
+        <Authorized>
+        <div class="nav-item px-3">
+        <NavLink class="nav-link rounded-7 d-flex justify-content-center" style="background-color: hsla(0, 0%, 89%, 1);" href="write_letter">
+        @Localized["WriteLetter"]
+        </NavLink>
+        </div>
+        <div class="nav-item px-3">
+        <NavLink class="nav-link" href="" Match="NavLinkMatch.All" style="padding-left:0 !important;">
+        <img src="css/icons/envelope-paper.svg" class="px-3"> @Localized["Inbox"]
+        </NavLink>
+        </div>
+        <div class="nav-item px-3">
+        <NavLink class="nav-link" href="outgoing" style="padding-left:0 !important;">
+        <img src="css/icons/send-check.svg" class="px-3"> @Localized["Outgoing"]
+        </NavLink>
+        </div>
+        <div class="nav-item px-3">
+        <NavLink class="nav-link" href="draft" style="padding-left:0 !important;">
+        <img src="css/icons/pencil-square.svg" class="px-3"> @Localized["Draft"]
+        </NavLink>
+        </div>
+        </Authorized>
+        <NotAuthorized>
+        <div class="nav-item px-3">
+        <NavLink class="nav-link" href="login">
+        <span class="oi oi-account-login" aria-hidden="true"></span> Login
+        </NavLink>
+        </div>
+        </NotAuthorized>
+        </AuthorizeView>
+        *@
     </nav>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    I18nText.Localized Localized = new I18nText.Localized();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Localized = await I18nText.GetTextTableAsync<I18nText.Localized>(this);
+    }
 
     private void ToggleNavMenu()
     {

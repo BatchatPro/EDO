@@ -1,0 +1,294 @@
+﻿@page "/accountinterface"
+@inject Toolbelt.Blazor.I18nText.I18nText I18nText
+@using EDO.WorkFlow.Models
+@inherits LayoutComponentBase
+
+<EditForm Model="@registrationDTO" class="signUp container">
+    <div class="form">
+        <p class="" style="color:white;text-align:center; width:90%;">@Localized["Personaldata"]</p>
+
+        <div class="foto" style="width:88%">
+            <img src="@_userAvatar" @onclick="DisplayAction" style="width:125px; height: 125px; object-fit: cover;" class="rounded-pill">
+            @*<img src="@_userAvatar" @onclick="DisplayAction" height="125" width="125" class="rounded-circle" />*@
+        </div>
+
+        <div class="formGroup" style="width:96%;">
+            @*Tegma*@
+            <label></label>
+            <p class=" " style="color:#94B49F;text-align:center; display:flex;">@Localized["Changephoto"]</p>
+        </div>
+
+        <div class="formGroup">
+            <label style="color:white">@Localized["FIO"]</label>
+            <InputText type="text" id="userName" @bind-Value="registrationDTO.UserName" autocomplete="off" />
+        </div>
+
+        <div class="formGroup">
+            <label style="color:white; ">@Localized["Role"]</label>
+            <InputText style="background-color: rgb(140, 140, 140)" type="text" @bind-Value="registrationDTO.Role" name="" required autocomplete="off" />
+        </div>
+
+        <div class="formGroup">
+            <label style="color:white">@Localized["Telephone"]</label>
+            <InputText type="tel" @bind-Value="registrationDTO.PhoneNumber" name="Телефон" required autocomplete="off" />
+        </div>
+
+        <div class="formGroup">
+            <label style="color:white">@Localized["Email"]</label>
+            <InputText type="email" @bind-Value="registrationDTO.Email" name="E-mail" required autocomplete="off" />
+        </div>
+
+        <div class="formGroup" style="width:96%;">
+            <label></label>
+            <p class=" " style="color:#94B49F;text-align:center; display:flex;">@Localized["Changephoto"]</p>
+        </div>
+
+        <div class="formGroup">
+            <label style="color:white">@Localized["Oldpassword"]</label>
+            <InputText type="password" @bind-Value="registrationDTO.Oldpassword" id="password" required autocomplete="off" />
+        </div>
+        <div class="formGroup">
+            <label style="color:white">@Localized["Newpassword"]</label>
+            <InputText type="password" @bind-Value="registrationDTO.Newpassword" id="confirmPassword" required autocomplete="off" />
+        </div>
+        <div class="formGroup">
+            <label style="color:white">@Localized["Confirmation"]</label>
+            <InputText type="password" @bind-Value="registrationDTO.Confirmation" id="confirmPassword" required autocomplete="off" />
+        </div>
+
+        <div class="iconss">
+            <a href=""><img src="Image/rocket.svg" alt="telegram-app.png" style="font-size: 10rem; color: rgb(0, 0, 0)"></a>
+            <a href=""><img src="Image/tg.svg"></a>
+            <a href=""><img src="Image/phone.svg" alt="telegram-app.png"></a>
+        </div>
+
+        <div class="buttons">
+            <button class="bn632-hover bn22" style="text-align: center !important;" type="button">@Localized["Save"]</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    private RegistrationDTO registrationDTO = new();
+    I18nText.Localized Localized = new I18nText.Localized();
+    private string _userAvatar = "Image/Profile.jpg";
+    private string _imageBase64Date;
+   
+
+    protected override async Task OnInitializedAsync()
+    {
+        Localized = await I18nText.GetTextTableAsync<I18nText.Localized>(this);
+    }
+
+    private async void DisplayAction()
+    {
+        string response = await App.Current.MainPage.DisplayActionSheet("Select Option","OK", null, "Take Photo", "Add Photo");
+
+        if (response == "Take Photo")
+        {
+            if (MediaPicker.Default.IsCaptureSupported)
+            {
+                var photo = await MediaPicker.Default.CapturePhotoAsync();
+                if (photo != null)
+                {
+                    byte[] imageBytes;
+                    var newFile = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+                    var stream = await photo.OpenReadAsync();
+
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        stream.CopyTo(ms);
+                        imageBytes = ms.ToArray();
+                    }
+                    _imageBase64Date = Convert.ToBase64String(imageBytes);
+                    _userAvatar = string.Format("data:Image/png; base64,{0}", _imageBase64Date);
+                    this.StateHasChanged();
+                }
+            }
+        }
+        else if (response == "Add Photo")
+        {
+            var photo = await MediaPicker.Default.PickPhotoAsync();
+            if (photo != null)
+            {
+                byte[] imageBytes;
+                var newFile = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+                var stream = await photo.OpenReadAsync();
+
+                using(MemoryStream ms = new MemoryStream())
+                {
+                    stream.CopyTo(ms);
+                    imageBytes = ms.ToArray();
+                }
+                _imageBase64Date = Convert.ToBase64String(imageBytes);
+                _userAvatar = string.Format("data:Image/png; base64,{0}", _imageBase64Date);
+                this.StateHasChanged();
+            }
+        }
+    }
+}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    .dot {
+        height: 100px;
+        width: 100px;
+        background-color: white;
+        border-radius: 50%;
+        display: inline-block;
+    }
+   
+    .buttons{
+        text-align:center;
+    }
+    .iconss{
+        margin-top: 5px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    .foto{
+        margin-top:7px;
+        margin-bottom:7px;
+        text-align:center;
+    }
+    .iconss img{
+        width: 45px;
+        height: 45px;
+        display: inline-block;
+        margin: 9px;
+    }
+    body {
+        background-image: url("Image/Frame1.png");
+        background-size: cover;
+        background-attachment: fixed;
+    }
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center !important;
+        margin-top: 5rem;
+    }
+    .form {
+        width: 600px;
+        height: auto;
+        background-color: rgba(41, 39, 39, 0.3);
+    }
+    .btn button {
+        padding: 3px;
+        margin: 30px 0px 40px 30px;
+        border-style: none;
+        font-size: 18px;
+    }
+    .formGroup {
+        display: flex;
+        justify-content: center;
+    }
+        .formGroup input {
+            border: none;
+            width: 60%;
+            padding: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            background-color: white;
+            border-radius:4px;
+        }
+
+    .formGroup p {
+        width: 60%;
+        padding: 8px;
+    }
+
+    input:focus {
+        outline: none !important;
+        
+    }
+
+    ::placeholder {
+        color: white;
+    }
+    .checkBox {
+        display: flex;
+        justify-content: center;
+        margin: 16px !important;
+    }
+    #checkbox {
+        margin-right: 10px;
+        height: 15px;
+        width: 15px;
+    }
+    .text {
+        color: rgb(199, 197, 197);
+        font-size: 13px;
+    }
+    .btn2 {
+        padding: 10px;
+        width: 50px;
+        border-radius: 20px;
+        background-color: rgb(10, 136, 43);
+        border-style: none;
+        color: white;
+        font-weight: 600;
+    }
+        .btn2:hover {
+            background-color: rgba(10, 136, 43, 0.5);
+        }
+    .btn button:hover {
+        border-bottom: 2px solid rgb(91, 243, 131);
+    }
+    .login {
+        display: none;
+    }
+    .login {
+        margin-top: 40px;
+    }
+    .login .checkBox {
+       margin-top: 30px !important;
+    }
+    .bn632-hover {
+        width: 130px;
+        font-weight: 600;
+        color: #fff;
+        cursor: pointer;
+        height: 30px;
+        text-align: center;
+        border: none;
+        background-size: 200% 50%;
+        border-radius: 6px !important;
+        -o-transition: all .4s ease-in-out;
+        -webkit-transition: all .4s ease-in-out;
+        transition: all .4s ease-in-out;
+    }
+    .bn632-hover:hover {
+        background-position: 100% 0;
+        -o-transition: all .4s ease-in-out;
+        -webkit-transition: all .4s ease-in-out;
+        transition: all .4s ease-in-out;
+    }
+    .bn632-hover:focus {
+        outline: none;
+    }
+    .bn632-hover.bn22 {
+        background-color: #94B49F;
+    }
+
+    .formGroup label{
+        float: left;
+        width: 25%;
+        margin-top: 6px;
+    }
+
+    .col-25 {
+        float: left;
+        width: 25%;
+        margin-top: 6px;
+    }
+    .col-75 {
+        float: right;
+        width: 70%;
+        margin-top: 6px;
+    }
+</style>
+
