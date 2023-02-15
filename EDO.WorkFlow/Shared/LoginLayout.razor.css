@@ -1,0 +1,38 @@
+@media (max-width:576px) {
+    .btn-primary {
+        height: 15vh !important;
+    }
+
+    .card-body {
+        height: 75vh !important;
+    }
+
+    .card-footer {
+        height: 10vh;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .img-fluid1 {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .form-control-lg {
+        min-height: calc(1.5em + 1rem + 2px);
+        padding: .75rem 0.5rem;
+        font-size: 1.25rem;
+        border-radius: .3rem;
+    }
+}
+
+@media (max-height:600px) {
+    .form-control-lg {
+        min-height: calc(1.5em + 1rem + 2px);
+        padding: .5rem 0.5rem;
+        font-size: 1.25rem;
+        border-radius: .3rem;
+    }
+}
