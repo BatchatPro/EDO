@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace EDO.WorkFlow.Models;
+namespace EDO.WorkFlow.DTOs;
 
 public class RegistrationDTO
 {
@@ -42,5 +42,5 @@ public class RegistrationDTO
     public string Oldpassword { get; set; }
     public string Newpassword { get; set; }
     public string Confirmation { get; set; }
-    public string UserAvatar { get; set; }  
+    public string UserAvatar { get; set; }
 }
