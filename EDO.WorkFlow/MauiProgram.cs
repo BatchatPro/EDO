@@ -2,7 +2,6 @@
 using EDO.WorkFlow.Data;
 using EDO.WorkFlow.Services;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.Extensions.Logging;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 namespace EDO.WorkFlow
@@ -37,7 +36,7 @@ namespace EDO.WorkFlow
             builder.Services.AddSingleton<IDocumentService, DocumentService>();
             builder.Services.AddSingleton<WeatherForecastService>();
 
-            //builder.Services.AddDevExpressBlazor(configure => configure.BootstrapVersion = BootstrapVersion.v5);
+            builder.Services.AddDevExpressBlazor(configure => configure.BootstrapVersion = BootstrapVersion.v5);
 
             return builder.Build();
         }
