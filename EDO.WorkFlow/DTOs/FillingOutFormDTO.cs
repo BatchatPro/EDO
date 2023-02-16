@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace EDO.WorkFlow.FillingOutForm;
+namespace EDO.WorkFlow.DTOs;
 
 public class FillingOutFormDTO
 {
@@ -23,5 +23,4 @@ public class FillingOutFormDTO
     public string Contentoftheletter { get; set; }
     [AllowNull]
     public string MiddelName { get; set; }
-   
 }

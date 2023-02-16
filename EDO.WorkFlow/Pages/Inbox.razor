@@ -6,7 +6,8 @@
 @inject WeatherForecastService ForecastService
 @using System.Collections.ObjectModel
 
-@*<DxGrid Data="@WeatherForecastData"
+
+<DxGrid Data="@WeatherForecastData"
         PagerNavigationMode="PagerNavigationMode.InputBox"
         PageSizeSelectorVisible="true"
         PageSizeSelectorAllRowsItemVisible="true"
@@ -23,8 +24,8 @@
         <DxGridSummaryItem SummaryType="GridSummaryItemType.Count" FieldName="Count" />
     </TotalSummary>
 
-</DxGrid>*@
-@*
+</DxGrid>
+
 @code {
     private IList<Outgoing> outgoingData = new List<Outgoing>();
     public class WeatherForecast
@@ -45,7 +46,7 @@
         WeatherForecastData = new ObservableCollection<WeatherForecast>();
         foreach (var date in Enumerable.Range(1, 20).Select(i => DateTime.Now)) ;
     }
-}*@
+}
 
 
 <style>
@@ -68,142 +69,3 @@
         font-weight: var(--dxbl-grid-header-font-weight);
     }
 </style>
-
-
-
-@*
-<div class="Main">
-    <div class="Main1">
-        @if (forecasts == null)
-        {
-            <p><em>Loading...</em></p>
-        }
-        else
-        {
-            <table class="Main_Table table">
-                <thead style="background-color:white; text-align: center;">
-                    <tr style="color: #94B49F;">
-                        <th>Название</th>
-                        <th>Кому</th>
-                        <th>Статус отправки</th>
-                        <th>Описание</th>
-                        <th>Дата</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var forecast in forecasts)
-                    {
-                        <tr style="color:white;">
-                            <td>
-                                <button type="button" style="border-radius: 50%; background-color: #94B49F; padding: 0 7px; font-size: 12px;" data-toggle="modal" data-target="#exampleModalCenter">
-                                    i
-                                </button> @forecast.Username
-                            </td>
-                            <td>@forecast.Towhom</td>
-                            <td style="color: green;">@forecast.Shippingstatus</td>
-                            <td>@forecast.Description</td>
-                            <td>@forecast.Data</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        
-        <div class=" " style="background-color:white; margin: 0px !important;">
-            <p style="color:black">Количество: 5 </p>
-        </div>
-
-        <div class="" style="background-color: #94B49F;">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only"></span>
-                        </a>
-                    </li>
-                    <li class="page-item active" aria-current="page">
-                        <span class="page-link">1</span>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only"></span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-</div>
-
-@code {
-    I18nText.Localized Localized = new I18nText.Localized();
-
-    private WeatherForecast[] forecasts;
-
-    protected override async Task OnInitializedAsync()
-    {
-        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
-        Localized = await I18nText.GetTextTableAsync<I18nText.Localized>(this);
-    }
-
-
-}
-
-<style>
-    /* Table */
-    .Main_Table {
-        margin: 0px !important;
-    }
-
-    .Main {
-        background-image: url(../wwwroot/Image/Frame1.png);
-        padding: 0px !important;
-    }
-
-    body {
-        background-image: url("Image/Frame1.png");
-        background-size: cover;
-        background-attachment: fixed;
-    }
-
-    td {
-        font-family: sans-serif;
-        font-size: 14px;
-    }
-
-    .px-4 {
-        padding-right: 0rem !important;
-        padding-left: 0rem !important;
-    }
-
-    .table > :not(caption) > * > * {
-        border-right-width: 1px;
-        padding-left: 20px !important;
-    }
-
-    p {
-        margin: 0px !important;
-    }
-
-    .page-link {
-        padding: .375rem .75rem;
-        margin-left: 25px;
-        background-color: #94B49F;
-        color: white;
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-
-    .page-item.active .page-link {
-        z-index: 3;
-        background-color: #3ebb8d;
-        border-color: white;
-    }
-
-</style>
-*@

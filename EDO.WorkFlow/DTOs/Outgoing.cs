@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EDO.WorkFlow.Models;
+namespace EDO.WorkFlow.DTOs;
 
 public class Outgoing
 {
@@ -17,4 +17,3 @@ public class Outgoing
 
     public string Data { get; set; }
 }
-                                       
