@@ -10,6 +10,7 @@ using System.Text;
 
 namespace EDO.API.Controllers;
 
+
 public class AccessController : Controller
 {
     private IOptions<AccessConfiguration> _siteSettings;
@@ -24,6 +25,10 @@ public class AccessController : Controller
     [Route("login")]
     public async Task<IActionResult> LoginAsync([FromBody] LogInDTO model)
     {
+        if(!ModelState.IsValid)
+        {
+            return BadRequest("Model state isn't valid");
+        }
         ApplicationUser user = await _userManager.FindByNameAsync(model.UserName);
         if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
         {

@@ -17,9 +17,9 @@ namespace WorkFlowApp
                 });
 
             builder.Services.AddMauiBlazorWebView();
-
+            builder.Services.AddScoped(x => new HttpClient());
 #if DEBUG
-		    builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Services.AddBlazorWebViewDeveloperTools();
             //builder.Logging.AddDebug();
 #endif
             builder.Services.AddAuthorizationCore(); // This is the core functionality
@@ -29,6 +29,8 @@ namespace WorkFlowApp
 
             builder.Services.AddBlazorWebView();
             
+            builder.Services.AddScoped<ILoginService, LoginService>();
+
             builder.Services.AddSingleton<IDocumentService, DocumentService>();
             builder.Services.AddSingleton<WeatherForecastService>();
 

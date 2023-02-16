@@ -1,6 +1,6 @@
 ﻿namespace WorkFlowApp.Models;
 
-public class LoginResponse
+public class LoginResponseModel
 {
     public string Token { get; set; }
     public DateTime Expiration { get; set; }
@@ -8,6 +8,5 @@ public class LoginResponse
     public string Email { get; set; }
     public string UserName { get; set; }
     public string UserFullName { get; set; }
-    public string Access { get; set; }
-
+    public string[] Access { get; set; }
 }
