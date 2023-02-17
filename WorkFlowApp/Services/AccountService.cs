@@ -13,18 +13,4 @@ public class AccountService : IAccountService
     {
         throw new NotImplementedException();
     }
-
-    public bool ValidateLogin(out string jwtToken, LoginModel loginModel)
-    {
-        if (loginModel.Username.Equals("batchat_pro") && loginModel.Password.Equals("12345678"))
-        {
-            jwtToken = "token_123456";
-            return true;
-        }
-
-        //Not valid
-        jwtToken = null;
-        loginModel.LoginFailureHidden = false;
-        return false;
-    }
 }
