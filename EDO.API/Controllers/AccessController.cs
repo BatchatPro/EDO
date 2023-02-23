@@ -1,4 +1,4 @@
-﻿using EDO.Access;
+﻿using EDO.Access.Models;
 using EDO.API.DTO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -69,4 +69,32 @@ public class AccessController : Controller
             claims.Add(roleClaim);
         }
     }
+
+    [HttpPost]
+    [Route("signin")]
+    public async Task<IActionResult> RegistrationAsync([FromBody] RegistrationDTO registrationDTO)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest("Model State isn't valid");
+
+        ApplicationUser user = await _userManager.FindByNameAsync(registrationDTO.UserName);
+
+        if (user != null)
+            return BadRequest("This user alrady Created.");
+
+        ApplicationUser applicationUser = new ApplicationUser()
+        {
+            UserName = registrationDTO.UserName,
+            LastName = registrationDTO.LastName,
+            FirstName = registrationDTO.FirstName,
+            Email = registrationDTO.Email,
+            PhoneNumber = registrationDTO.PhoneNumber
+        };
+        var result = await _userManager.CreateAsync(applicationUser, registrationDTO.Password);
+        if (result.Succeeded)
+            await _userManager.AddToRolesAsync(applicationUser, new string[] { RoleConst.NEWUSER });
+
+        return Ok(result);
+    }
+
 }

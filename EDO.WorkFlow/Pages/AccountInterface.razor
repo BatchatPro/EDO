@@ -1,4 +1,4 @@
-﻿@page "/accountinterface"
+﻿@*@page "/accountinterface"
 @inject Toolbelt.Blazor.I18nText.I18nText I18nText
 @inherits LayoutComponentBase
 
@@ -7,13 +7,13 @@
         <p class="" style="color:white;text-align:center; width:90%;">@Localized["Personaldata"]</p>
 
         <div class="foto" style="width:88%">
-            <img src="@_userAvatar" @onclick="DisplayAction" style="width:125px; height: 125px; object-fit: cover;" class="rounded-pill">
+            <img src="@_userAvatar" @onclick="DisplayAction" style="width:125px; height: 125px; object-fit: cover;" class="rounded-pill">*@
             @*<img src="@_userAvatar" @onclick="DisplayAction" height="125" width="125" class="rounded-circle" />*@
-        </div>
+        @*</div>
 
-        <div class="formGroup" style="width:96%;">
+        <div class="formGroup" style="width:96%;">*@
             @*Tegma*@
-            <label></label>
+            @*<label></label>
             <p class=" " style="color:#94B49F;text-align:center; display:flex;">@Localized["Changephoto"]</p>
         </div>
 
@@ -69,14 +69,14 @@
 
 @code {
     private RegistrationDTO registrationDTO = new();
-    I18nText.Localized Localized = new I18nText.Localized();
+    Localized Localized = new Localized();
     private string _userAvatar = "Image/Profile.jpg";
     private string _imageBase64Date;
    
 
     protected override async Task OnInitializedAsync()
     {
-        Localized = await I18nText.GetTextTableAsync<I18nText.Localized>(this);
+        Localized = await I18nText.GetTextTableAsync<Localized>(this);
     }
 
     private async void DisplayAction()
@@ -125,8 +125,8 @@
             }
         }
     }
-}
-<style>
+}*@
+@*<style>
     * {
         margin: 0;
         padding: 0;
@@ -289,5 +289,5 @@
         width: 70%;
         margin-top: 6px;
     }
-</style>
+</style>*@
 

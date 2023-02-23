@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Data.Common;
 
-namespace EDO.Access;
+namespace EDO.Access.Models;
 
 public class ApplicationRole : IdentityRole
 {
     public ApplicationRole() { }
     public ApplicationRole(string roleName, string roleTitle)
     {
-        this.Name = roleName;
-        this.Title = roleTitle;
+        Name = roleName;
+        Title = roleTitle;
     }
     public string Title { get; set; }
 }

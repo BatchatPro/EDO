@@ -1,8 +1,7 @@
-﻿namespace EDO.API.DTO
+﻿namespace EDO.API.DTO;
+
+public class LogInDTO
 {
-    public class LogInDTO
-    {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-    }
+    public string UserName { get; set; }
+    public string Password { get; set; }
 }

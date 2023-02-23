@@ -1,4 +1,4 @@
-﻿using EDO.Access;
+﻿using EDO.Access.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace EDO.API;

@@ -1,4 +1,5 @@
 using EDO.Access;
+using EDO.Access.Models;
 using EDO.API;
 using EDO.Database;
 using Microsoft.AspNetCore.Identity;
@@ -11,8 +12,8 @@ IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettin
 var connectionString = configuration["ConnectionStrings:PostgresConnectionString"];
 builder.Services.AddOptions();
 builder.Services.Configure<AccessConfiguration>(configuration.GetSection("AccessConfiguration"));
-builder.Services.AddDbContext<AccessDbContext>(option => option.UseNpgsql(connectionString));
 
+builder.Services.AddDbContext<AccessDbContext>(option => option.UseNpgsql(connectionString));
 builder.Services.AddDbContext<EdoDbContext>(option => option.UseNpgsql(connectionString));
 
 builder.Services.AddControllers();

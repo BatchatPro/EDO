@@ -1,16 +1,16 @@
-﻿@page "/login"
+﻿@*@page "/login"
 @layout LoginLayout
 @inject NavigationManager NavigationManager
 @inherits LayoutComponentBase
 @inject NavigationManager Navigation;
 @inject CustomAuthenticationStateProvider AuthStateProvider;
-@inject Toolbelt.Blazor.I18nText.I18nText I18nText
+@inject Toolbelt.Blazor.I18nText.I18nText I18nText*@
 
 @*<div class="alert alert-info">
     UserName = "batchat_pro"    Password = "12345678"
 </div>*@
 
-<EditForm Model="@loginModel" OnValidSubmit="@HandleValidSubmit" class="vh-100 bg-image images">
+@*<EditForm Model="@loginModel" OnValidSubmit="@HandleValidSubmit" class="vh-100 bg-image images">
     <div class="container vh-100 ">
         <div class="row d-flex justify-content-center align-items-center h-100" style="">
             <div class="col-12 col-md-8 col-lg-6 col-xl-4">
@@ -52,11 +52,11 @@
 @code {
     private LoginModel loginModel = new();
     private AccountService accountService = new();
-    I18nText.Localized Localized = new I18nText.Localized();
+    Localized Localized = new Localized();
 
     protected override async Task OnInitializedAsync()
     {
-        Localized = await I18nText.GetTextTableAsync<I18nText.Localized>(this);
+        Localized = await I18nText.GetTextTableAsync<Localized>(this);
     }
 
     private async Task HandleValidSubmit()
@@ -72,11 +72,11 @@
         await AuthStateProvider.Login(jwtToken);
         Navigation.NavigateTo(""); //Root URL
     }
-}
+}*@
 
 
 
-<style>
+@*<style>
     .text-center {
         text-align: center;
     }
@@ -153,5 +153,5 @@
         background-image: linear-gradient( to right, #0ba360, #3cba92, #30dd8a, #2bb673 );
         box-shadow: 0 4px 15px 0 rgba(23, 168, 108, 0.75);
     }
-</style >
+</style >*@
  

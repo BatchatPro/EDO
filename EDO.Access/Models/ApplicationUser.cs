@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Diagnostics.CodeAnalysis;
+using NullGuard;
 
-namespace EDO.Access;
+namespace EDO.Access.Models;
 
 public class ApplicationUser : IdentityUser
 {

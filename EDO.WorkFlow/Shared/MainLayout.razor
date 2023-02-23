@@ -18,7 +18,7 @@
                     <a href="/" type="button" class="mx-2">
                         <img src="css/icons/stickies.svg" style="border-radius:6px;" class="bg-white p-1">
                     </a>
-                    <a><input type="text" class="border-0 p-2" style="height:24px;width: 230px; font-size: 9px; border-radius:6px; margin-left:8px;" placeholder="@Localized["Search"]"></a>
+                    <a><input type="text" class="border-0 p-2" style="height:24px;width: 230px; font-size: 9px; border-radius:6px; margin-left:8px;" placeholder="Search"></a>
                     <a href="/" type="button" style="margin-left:1px; margin-right:1px;">
                         <img src="css/icons/sliders.svg" style="border-radius:6px;" class="bg-white mx-0 p-1">
                     </a>
@@ -73,16 +73,16 @@
                             <a type="button" class="navbar-brand btn " data-bs-toggle="dropdown" style="display: flex; justify-content: center; align-items:center; background-color: #91b89f; border-radius: 10px;">
                                 <div style="padding-right: 5%;">
                                     <div style="color:white; font-size: 15px; text-align: right;">Nabijonov Abdulaziz</div>
-                                    <div style="color:white; font-size: 8px; text-align: right;">@Localized["Worker"]</div>
+                                    <div style="color:white; font-size: 8px; text-align: right;">"Worker"</div>
                                 </div>
                                 <div>
                                     <img src="Image/Profile.jpg" alt="Logo" style="width:35px; height: 35px; object-fit: cover;" class="rounded-pill">
                                 </div>
                             </a>
                             <ul class="dropdown-menu p-0" style="border-radius: 10px; background-color: #94B49F;" aria-labelledby="navbarDarkDropdownMenuLink">
-                                <li><a class="dropdown-item" style="border-radius: 10px;" href="/accountinterface">@Localized["PersonalData"]</a></li>
-                                <li><a class="dropdown-item" href="/accountinterface">@Localized["PasswordsSecurity"]</a></li>
-                                <li><a class="dropdown-item bg-danger" style=" border-bottom-left-radius: 10px; border-bottom-right-radius:10px ;" href="/logout">@Localized["Logout"]</a></li>
+                                <li><a class="dropdown-item" style="border-radius: 10px;" href="/accountinterface">"PersonalData"</a></li>
+                                <li><a class="dropdown-item" href="/accountinterface">"PasswordsSecurity"</a></li>
+                                <li><a class="dropdown-item bg-danger" style=" border-bottom-left-radius: 10px; border-bottom-right-radius:10px ;" href="/logout">"Logout"</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -98,10 +98,10 @@
 
 
 @code {
-    I18nText.Localized Localized = new I18nText.Localized();
+    //I18nText.Localized Localized = new I18nText.Localized();
 
-    protected override async Task OnInitializedAsync()
-    {
-        Localized = await I18nText.GetTextTableAsync<I18nText.Localized>(this);
-    }
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    Localized = await I18nText.GetTextTableAsync<I18nText.Localized>(this);
+    //}
 }
