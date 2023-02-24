@@ -1,7 +1,7 @@
 ﻿using NullGuard;
 using System.ComponentModel.DataAnnotations;
 
-namespace EDO.API.DTO;
+namespace EDO.Access.DTO;
 
 public class RegistrationDTO
 {

@@ -1,5 +1,5 @@
-﻿using EDO.Access.Models;
-using EDO.API.DTO;
+﻿using EDO.Access.DTO;
+using EDO.Access.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;

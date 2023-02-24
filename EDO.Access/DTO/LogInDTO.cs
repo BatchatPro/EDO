@@ -1,4 +1,4 @@
-﻿namespace EDO.API.DTO;
+﻿namespace EDO.Access.DTO;
 
 public class LogInDTO
 {
