@@ -2,9 +2,12 @@ using EDO.Access;
 using EDO.Access.Models;
 using EDO.API;
 using EDO.Database;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +45,7 @@ builder.Services.AddSwaggerGen(option =>
         In = ParameterLocation.Header,
         Description = "Please enter a valid token",
         Name = "Authorization",
-        Type = SecuritySchemeType.Http,
+        Type = SecuritySchemeType.ApiKey,
         BearerFormat = "JWT",
         Scheme = "Bearer"
     });
@@ -60,6 +63,26 @@ builder.Services.AddSwaggerGen(option =>
             new string[]{}
         }
     });
+});
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = configuration["AccessConfiguration:Audience"],
+        ValidIssuer = configuration["AccessConfiguration:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Vars.TheSecretKey))
+    };
 });
 
 var app = builder.Build();

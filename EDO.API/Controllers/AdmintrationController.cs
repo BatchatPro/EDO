@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace EDO.API.Controllers;
-[Authorize(Roles = "admin")]
+
+[Authorize(Roles = RoleConst.ADMIN)]
 [Route("api/[controller]")]
 [ApiController]
 public class AdmintrationController : ControllerBase
