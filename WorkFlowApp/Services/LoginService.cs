@@ -17,7 +17,7 @@ public class LoginService : ILoginService
     {
         var jsonRequest = JsonConvert.SerializeObject(loginRequest);
         var stringContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync("https://localhost:44369/login", stringContent);
+        var response = await _httpClient.PostAsync("http://192.168.10.22:7777/login", stringContent);
         var jsonResponse = await response.Content.ReadAsStringAsync();
         return jsonResponse;
     }

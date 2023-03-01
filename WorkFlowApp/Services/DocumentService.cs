@@ -5,7 +5,7 @@ namespace WorkFlowApp.Services;
 
 public class DocumentService:IDocumentService
 {
-    private string _baseUrl = "https://localhost:44369";
+    private string _baseUrl = "http://192.168.10.22:7777";
 
     public async Task<List<DocumentResponseModel>> GetAllDocuments()
     {

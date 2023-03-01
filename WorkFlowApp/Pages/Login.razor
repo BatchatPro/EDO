@@ -11,10 +11,6 @@
 
 <p style="color:darkred">@errorMassage</p>
 
-<div class="alert alert-info">
-    Kirish uchun username: "mamatkulov@uzcsd.uz" password: "lpnz2xoflf6c".
-</div>
-
 <EditForm Model="@loginModel" OnValidSubmit="@LoginTask">
     <div class="form-group">
         <label>Username</label>
@@ -30,7 +26,12 @@
 </EditForm>
 
 @code {
-    private LoginRequest loginModel = new();
+
+    public LoginRequest loginModel = new LoginRequest()
+    {
+        UserName = "goblindev02@gmail.com",
+        Password = "abdu123456"
+    };
     public string token{ get; set; }
     public string errorMassage { get; set; }
     private async Task LoginTask()
@@ -41,6 +42,7 @@
             return;
         }
         var jsonResponse = await LoginService.LoginAsync(loginModel);
+        Console.WriteLine(jsonResponse);
         var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(jsonResponse);
         if (loginResponse != null)
         {
