@@ -1,5 +1,8 @@
 ﻿using EDO.Database;
 using EDO.Database.Models;
+using EDO.Service.Mapper;
+using EDO.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,28 +21,33 @@ public class DocumentTypeController : ControllerBase
 
     // GET: api/DocumentTypes
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<DocumentType>>> GetDocumentTypes()
+    public async Task<ActionResult<IEnumerable<DocumentTypeDTO>>> GetDocumentTypes()
     {
-        return (_context.DocumentTypes == null) ? NotFound() : await _context.DocumentTypes.ToListAsync();
+        return (_context.DocumentTypes == null) ? NotFound() : await _context.DocumentTypes.Select(x => new DocumentTypeDTO()
+        {
+            Id = x.Id,
+            Name = x.Name,
+            Description = x.Description
+        }).ToListAsync();
     }
 
     // GET: api/DocumentTypes/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<DocumentType>> GetDocumentType(int id)
+    public async Task<ActionResult<DocumentTypeDTO>> GetDocumentType(int id)
     {
         var documentType = await _context.DocumentTypes.FindAsync(id);
 
-        return (documentType == null) ? NotFound() : documentType;
+        return (documentType == null) ? NotFound() : documentType.ConvertToDTO();
     }
 
     // PUT: api/DocumentTypes
     [HttpPut]
-    public async Task<IActionResult> PutDocumentType(DocumentType documentType)
+    public async Task<IActionResult> PutDocumentType(DocumentTypeDTO documentType)
     {
         if (!DocumentTypeExists(documentType.Id))
             return NotFound($"Not Found element with this id: {documentType.Id}");
 
-        _context.DocumentTypes.Update(documentType);
+        _context.DocumentTypes.Update(documentType.ConvetToEntity());
         await _context.SaveChangesAsync();
 
         return Ok(documentType);
@@ -47,9 +55,9 @@ public class DocumentTypeController : ControllerBase
 
     // POST: api/DocumentTypes
     [HttpPost]
-    public async Task<ActionResult<DocumentType>> PostDocumentType(DocumentType documentType)
+    public async Task<ActionResult<DocumentType>> PostDocumentType(DocumentTypeDTO documentType)
     {
-        _context.DocumentTypes.Add(documentType);
+        _context.DocumentTypes.Add(documentType.ConvetToEntity());
         await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetDocumentType), new { id = documentType.Id }, documentType);
@@ -57,7 +65,7 @@ public class DocumentTypeController : ControllerBase
 
     // DELETE: api/DocumentTypes/5
     [HttpDelete("{id}")]
-    public async Task<ActionResult<DocumentType>> DeleteDocumentType(int id)
+    public async Task<ActionResult<DocumentTypeDTO>> DeleteDocumentType(int id)
     {
         var documentType = await _context.DocumentTypes.FindAsync(id);
         if (documentType == null)

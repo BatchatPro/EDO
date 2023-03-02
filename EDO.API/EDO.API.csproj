@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EDO.Access\EDO.Access.csproj" />
     <ProjectReference Include="..\EDO.Database\EDO.Database.csproj" />
+    <ProjectReference Include="..\EDO.Service\EDO.Service.csproj" />
     <ProjectReference Include="..\EDO.Shared\EDO.Shared.csproj" />
   </ItemGroup>
 

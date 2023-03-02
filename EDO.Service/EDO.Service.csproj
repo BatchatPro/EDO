@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EDO.Database\EDO.Database.csproj" />
+    <ProjectReference Include="..\EDO.Shared\EDO.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
