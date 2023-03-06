@@ -41,6 +41,9 @@ public class AdmintrationController : ControllerBase
             if (!result.Succeeded)
                 throw new BadHttpRequestException(result.Errors.Select(x => x.Description).ToString());
 
+            if (result.Succeeded)
+                await _userManager.AddToRolesAsync(user, new string[] { RoleConst.NEWUSER });
+
             return Ok(userDTO);
         }
         catch (Exception ex)

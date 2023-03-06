@@ -1,8 +1,6 @@
 ﻿using EDO.Database;
-using EDO.Database.Models;
 using EDO.Service.Mapper;
 using EDO.Shared;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

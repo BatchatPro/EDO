@@ -1,10 +1,10 @@
-﻿using NullGuard;
+﻿using EDO.Domain;
+using NullGuard;
 
 namespace EDO.Database.Models;
 
-public class DocumentType
+public class DocumentType:BaseEntity
 {
-    public int Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     [AllowNull]

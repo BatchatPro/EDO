@@ -24,7 +24,12 @@ public class RoleInitializer
                 await roleManager.CreateAsync(new ApplicationRole(role.Key, role.Value));
         ApplicationUser user = await userManager.FindByNameAsync(adminEmail);
         if (user != null)
+        {
             await userManager.AddToRolesAsync(user, new string[] { RoleConst.ADMIN });
+            await userManager.AddToRolesAsync(user, new string[] { RoleConst.MAIN });
+            await userManager.AddToRolesAsync(user, new string[] { RoleConst.DIVISION });
+            await userManager.AddToRolesAsync(user, new string[] { RoleConst.STUFF });
+        }
 
         else
         {

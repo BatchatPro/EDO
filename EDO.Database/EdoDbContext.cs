@@ -16,6 +16,7 @@ public class EdoDbContext:DbContext
     }
     public DbSet<Document> Documents { get; set; }
     public DbSet<DocumentType> DocumentTypes { get; set; }
+    //public DbSet<DocumentUser> DocumentUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
