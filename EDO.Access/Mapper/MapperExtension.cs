@@ -1,5 +1,6 @@
 ﻿using EDO.Access.DTO;
 using EDO.Access.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace EDO.Access.Mapper;
 
@@ -64,7 +65,7 @@ public static class MapperExtension
             Id = applicationUser.Id,
             LastName = applicationUser.LastName,
             PhoneNumber = applicationUser.PhoneNumber,
-            UserName = applicationUser.UserName
+            UserName = applicationUser.UserName,
         });
     #region Role
     public static ApplicationRole ConvertToEntity(this RoleDTO roleDTO)
@@ -74,7 +75,6 @@ public static class MapperExtension
         return new ApplicationRole()
         {
             Name = roleDTO.Name,
-            Title = roleDTO.Title
         };
     }
     public static RoleDTO ConvertToDTO(this ApplicationRole applicationRole)
@@ -84,20 +84,17 @@ public static class MapperExtension
         return new RoleDTO()
         {
             Name = applicationRole.Name,
-            Title = applicationRole.Title
         };
     }
     public static IEnumerable<ApplicationRole> ConvertToEntity(this IEnumerable<RoleDTO> statusDTO) =>
         statusDTO.Select(address => new ApplicationRole
         {
             Name = address.Name,
-            Title = address.Title
         });
     public static IEnumerable<RoleDTO> ConvertToDTO(this IEnumerable<ApplicationRole> statusDTO) =>
         statusDTO.Select(address => new RoleDTO
         {
             Name = address.Name,
-            Title = address.Title
         });
     #endregion
 
