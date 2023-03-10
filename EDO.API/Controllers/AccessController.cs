@@ -21,6 +21,7 @@ public class AccessController : Controller
         this._siteSettings = siteSettings;
         this._userManager = userManager;
     }
+
     [HttpPost]
     [Route("login")]
     public async Task<IActionResult> LoginAsync([FromBody] LogInDTO model)
@@ -60,7 +61,6 @@ public class AccessController : Controller
         }
         return Unauthorized();
     }
-
     private void AddRolesToClaims(List<Claim> claims, IEnumerable<string> roles)
     {
         foreach (var role in roles)
@@ -70,8 +70,9 @@ public class AccessController : Controller
         }
     }
 
+
     [HttpPost]
-    [Route("signin")]
+    [Route("signup")]
     public async Task<IActionResult> RegistrationAsync([FromBody] RegistrationDTO registrationDTO)
     {
         if (!ModelState.IsValid)
@@ -96,5 +97,4 @@ public class AccessController : Controller
 
         return Ok(result);
     }
-
 }

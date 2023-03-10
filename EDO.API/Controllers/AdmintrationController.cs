@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace EDO.API.Controllers;
 
@@ -20,6 +21,27 @@ public class AdmintrationController : ControllerBase
     {
         this._userManager = userManager;
         this._roleManager = roleManager;
+    }
+
+
+    [HttpGet]
+    [Route("User/GetAll")]
+    public async Task<IActionResult> GetAll() => Ok((await _userManager.Users.ToListAsync()).ConvertToDTO());
+
+
+    [HttpGet]
+    [Route("User/GetRolesByUserId{Id:Guid}")]
+    public async Task<IActionResult> GetUserRolesById(Guid Id)
+    {
+        ApplicationUser user = await _userManager.FindByIdAsync(Convert.ToString(Id));
+        IEnumerable<string> roles = await _userManager.GetRolesAsync(user);
+
+        return (roles == null) ? NotFound() : Ok(new
+        {
+            userId = user.Id,
+            access = roles,
+        });
+
     }
 
     [HttpPost]
@@ -51,6 +73,7 @@ public class AdmintrationController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
 
     [HttpPost]
     [Route("User/AddRoleToUser")]
@@ -85,6 +108,7 @@ public class AdmintrationController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
 
     [HttpPost]
     [Route("User/RemoveRoleFromUser")]
@@ -123,6 +147,7 @@ public class AdmintrationController : ControllerBase
         }
     }
 
+
     [HttpPost]
     [Route("User/ChangeUser")]
     public async Task<IActionResult> ChangeUser(ApplicationUserDTO userDTO)
@@ -145,10 +170,5 @@ public class AdmintrationController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-
-    [HttpGet]
-    [Route("User/GetAll")]
-    public async Task<IActionResult> GetAll() => Ok((await _userManager.Users.ToListAsync()).ConvertToDTO());
-
 }
 
