@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EDO.API.Controllers;
 
+[Authorize(Roles = RoleConst.MAIN)]
 [Route("api/[controller]")]
 [ApiController]
 public class DocumentTypeController : ControllerBase

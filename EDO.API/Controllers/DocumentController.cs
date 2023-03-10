@@ -1,10 +1,13 @@
 ﻿using EDO.Database;
 using EDO.Service.Mapper;
 using EDO.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace EDO.API.Controllers;
+
+[Authorize(Roles = RoleConst.STUFF)]
 [Route("api/[controller]")]
 [ApiController]
 public class DocumentsController : ControllerBase
