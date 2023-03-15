@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EDO.Database.Migrations
 {
     [DbContext(typeof(EdoDbContext))]
-    [Migration("20230306103356_001")]
+    [Migration("20230313121757_001")]
     partial class _001
     {
         /// <inheritdoc />
@@ -32,6 +32,10 @@ namespace EDO.Database.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AuthorUserName")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");

@@ -1,7 +1,9 @@
-﻿using EDO.Database;
+﻿using EDO.Access.Models;
+using EDO.Database;
 using EDO.Service.Mapper;
 using EDO.Shared;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,10 +15,12 @@ namespace EDO.API.Controllers;
 public class DocumentsController : ControllerBase
 {
     private readonly EdoDbContext _context;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public DocumentsController(EdoDbContext context)
+    public DocumentsController(EdoDbContext context, UserManager<ApplicationUser> userManager)
     {
         _context = context;
+        this._userManager = userManager;
     }
 
     // GET: api/Documents
@@ -29,7 +33,8 @@ public class DocumentsController : ControllerBase
             Name = x.Name,
             Description = x.Description,
             DocumentTypeId = x.DocumentTypeId,
-            FilePath = x.FilePath
+            FilePath = x.FilePath,
+            AuthorUserName = x.AuthorUserName
         }).ToListAsync());
     }
 
@@ -49,7 +54,7 @@ public class DocumentsController : ControllerBase
     {
         if(!DocumentExists(document.Id))
             return NotFound($"Not Found element with this id: {document.Id}");
-        
+
         _context.Documents.Update(document.ConvertToEntity());
         await _context.SaveChangesAsync();
         

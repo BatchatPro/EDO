@@ -15,5 +15,7 @@ public class DocumentDTO
     [Required]
     public string Status { get; set; }
     [Required]
+    public string AuthorUserName { get; set; }
+    [Required]
     public int DocumentTypeId { get; set; }
 }

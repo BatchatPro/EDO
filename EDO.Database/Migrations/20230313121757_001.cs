@@ -39,6 +39,7 @@ namespace EDO.Database.Migrations
                     FilePath = table.Column<string>(type: "text", nullable: false),
                     Status = table.Column<string>(type: "text", nullable: false),
                     DocumentTypeId = table.Column<int>(type: "integer", nullable: false),
+                    AuthorUserName = table.Column<string>(type: "text", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     UpdateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },

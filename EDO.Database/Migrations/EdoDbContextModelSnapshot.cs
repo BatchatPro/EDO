@@ -30,6 +30,10 @@ namespace EDO.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AuthorUserName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
