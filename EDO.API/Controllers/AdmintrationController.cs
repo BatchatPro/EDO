@@ -9,7 +9,6 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace EDO.API.Controllers;
 
-[Authorize(Roles = RoleConst.ADMIN)]
 [Route("api/[controller]")]
 [ApiController]
 public class AdmintrationController : ControllerBase
@@ -23,12 +22,12 @@ public class AdmintrationController : ControllerBase
         this._roleManager = roleManager;
     }
 
-
+    [Authorize(Roles = RoleConst.ADMIN)]
     [HttpGet]
     [Route("User/GetAll")]
     public async Task<IActionResult> GetAll() => Ok((await _userManager.Users.ToListAsync()).ConvertToDTO());
 
-
+    [Authorize(Roles = RoleConst.STUFF)]
     [HttpGet]
     [Route("User/GetRolesByUserId{Id:Guid}")]
     public async Task<IActionResult> GetUserRolesById(Guid Id)
@@ -44,6 +43,7 @@ public class AdmintrationController : ControllerBase
 
     }
 
+    [Authorize(Roles = RoleConst.ADMIN)]
     [HttpPost]
     [Route("User/CreateUser")]
     public async Task<IActionResult> CreateAccount([FromBody] RegistrationDTO userDTO)
@@ -74,7 +74,7 @@ public class AdmintrationController : ControllerBase
         }
     }
 
-
+    [Authorize(Roles = RoleConst.ADMIN)]
     [HttpPost]
     [Route("User/AddRoleToUser")]
     public async Task<IActionResult> AddRoleToUser([FromBody] UserRolesDTO userRolesDTO)
@@ -109,7 +109,7 @@ public class AdmintrationController : ControllerBase
         }
     }
 
-
+    [Authorize(Roles = RoleConst.ADMIN)]
     [HttpPost]
     [Route("User/RemoveRoleFromUser")]
     public async Task<IActionResult> RemoveRoleFromUser(UserRolesDTO userRolesDTO)
@@ -147,14 +147,16 @@ public class AdmintrationController : ControllerBase
         }
     }
 
-
+    [Authorize(Roles = RoleConst.STUFF)]
     [HttpPost]
     [Route("User/ChangeUser")]
-    public async Task<IActionResult> ChangeUser(ApplicationUserDTO userDTO)
+    public async Task<IActionResult> ChangeUser([FromBody]ApplicationUserDTO userDTO)
     {
         try
         {
             ApplicationUser user = await _userManager.FindByIdAsync(userDTO.Id);
+            if (user == null)
+                return NotFound();
             user.LastName = userDTO.LastName;
             user.FirstName = userDTO.FirstName;
             user.PhoneNumber = userDTO.PhoneNumber;
@@ -163,7 +165,7 @@ public class AdmintrationController : ControllerBase
             if (!result.Succeeded)
                 return BadRequest(new { Successful = false, Errors = result.Errors.Select(x => x.Description) });
 
-            return Ok(user.ConvertToDTO);
+            return Ok(user.ConvertToDTO());
         }
         catch (Exception ex)
         {
