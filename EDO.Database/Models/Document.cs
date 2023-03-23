@@ -10,7 +10,6 @@ public class Document:BaseEntity
     public string FilePath { get; set; }
     public string Status { get; set; }
     public int DocumentTypeId { get; set; }
-    public string AuthorUserName { get; set; }
     [AllowNull]
     public DocumentType? DocumentType { get; set; }
 }

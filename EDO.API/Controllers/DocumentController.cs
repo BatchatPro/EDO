@@ -3,6 +3,7 @@ using EDO.Database;
 using EDO.Service.Mapper;
 using EDO.Shared;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,15 +28,34 @@ public class DocumentsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<DocumentDTO>>> GetDocuments()
     {
-        return (_context.Documents == null) ? NotFound(): (await _context.Documents.Select(x => new DocumentDTO
+        if (User.IsInRole(RoleConst.ADMIN))
+            return (_context.Documents == null) ? NotFound() : (await _context.Documents.Select(x => new DocumentDTO
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                DocumentTypeId = x.DocumentTypeId,
+                FilePath = x.FilePath,
+                CreatedBy = x.CreatedBy
+            }).ToListAsync());
+
+        var userName = _userManager.GetUserId(User);
+        var user = await _userManager.FindByNameAsync(userName);
+
+        var documents = await _context.Documents
+        .Where(d => d.CreatedBy == user.Id)
+        .Select(x => new DocumentDTO
         {
             Id = x.Id,
             Name = x.Name,
             Description = x.Description,
             DocumentTypeId = x.DocumentTypeId,
             FilePath = x.FilePath,
-            AuthorUserName = x.AuthorUserName
-        }).ToListAsync());
+            CreatedBy = x.CreatedBy
+        })
+        .ToListAsync();
+
+        return Ok(documents);
     }
 
 
@@ -43,17 +63,28 @@ public class DocumentsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<DocumentDTO>> GetDocument(int id)
     {
+        if (!User.IsInRole(RoleConst.ADMIN) && !await IsAuthor(id))
+            return Forbid();
+
         var document = await _context.Documents.FindAsync(id);
 
-        return (document == null) ? NotFound() : document.ConvertToDTO();
+        return (document == null) ? NotFound($"Not Found element with this id: {id}") : document.ConvertToDTO();
     }
 
     // PUT: api/Documents
     [HttpPut]
     public async Task<IActionResult> PutDocument(DocumentDTO document)
     {
-        if(!DocumentExists(document.Id))
+        if (!DocumentExists(document.Id))
             return NotFound($"Not Found element with this id: {document.Id}");
+
+        if (!User.IsInRole(RoleConst.ADMIN) && !await IsAuthor(document.Id))
+            return Forbid();
+
+        var userName = _userManager.GetUserId(User);
+        var user = await _userManager.FindByNameAsync(userName);
+
+        document.CreatedBy = user.Id;
 
         _context.Documents.Update(document.ConvertToEntity());
         await _context.SaveChangesAsync();
@@ -65,6 +96,10 @@ public class DocumentsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<DocumentDTO>> PostDocument(DocumentDTO document)
     {
+        var userName = _userManager.GetUserId(User);
+        var user = await _userManager.FindByNameAsync(userName);
+
+        document.CreatedBy = user.Id;
         _context.Documents.Add(document.ConvertToEntity());
         await _context.SaveChangesAsync();
 
@@ -75,20 +110,35 @@ public class DocumentsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<DocumentDTO>> DeleteDocument(int id)
     {
+        if (!User.IsInRole(RoleConst.ADMIN) && !await IsAuthor(id))
+            return Forbid();
+
         var document = await _context.Documents.FindAsync(id);
         if (document == null)
-        {
             return NotFound($"Not Found Element with this id: {id}");
-        }
 
         _context.Documents.Remove(document);
         await _context.SaveChangesAsync();
 
-        return NoContent();
+        return NotFound();
     }
 
     private bool DocumentExists(int id)
     {
         return _context.Documents.Any(e => e.Id == id);
+    }
+
+    private async Task<bool> IsAuthor(int documentId)
+    {
+        var document = await _context.Documents.FindAsync(documentId);
+        if (document == null)
+            return false;
+
+        var userName = _userManager.GetUserId(User);
+        var user = await _userManager.FindByNameAsync(userName);
+        if (user.Id == null)
+            return false;
+        
+        return user.Id == document.CreatedBy;
     }
 }

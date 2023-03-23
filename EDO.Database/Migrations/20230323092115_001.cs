@@ -21,7 +21,9 @@ namespace EDO.Database.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                    UpdateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -39,9 +41,10 @@ namespace EDO.Database.Migrations
                     FilePath = table.Column<string>(type: "text", nullable: false),
                     Status = table.Column<string>(type: "text", nullable: false),
                     DocumentTypeId = table.Column<int>(type: "integer", nullable: false),
-                    AuthorUserName = table.Column<string>(type: "text", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                    UpdateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {

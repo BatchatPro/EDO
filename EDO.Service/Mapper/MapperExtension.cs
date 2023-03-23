@@ -17,7 +17,7 @@ public static class MapperExtension
             FilePath = document.FilePath,
             Status = document.Status,
             DocumentTypeId = document.DocumentTypeId,
-            AuthorUserName = document.AuthorUserName
+            CreatedBy = document.CreatedBy
         };
     }
 
@@ -33,7 +33,7 @@ public static class MapperExtension
             FilePath = documentDTO.FilePath,
             Status = documentDTO.Status,
             DocumentTypeId = documentDTO.DocumentTypeId,
-            AuthorUserName = documentDTO.AuthorUserName
+            CreatedBy = documentDTO.CreatedBy
         };
     }
 
@@ -46,7 +46,7 @@ public static class MapperExtension
             FilePath = documentDTO.FilePath,
             Status = documentDTO.Status,
             DocumentTypeId = documentDTO.DocumentTypeId,
-            AuthorUserName = documentDTO.AuthorUserName
+            CreatedBy = documentDTO.CreatedBy
         });
 
     public static DocumentTypeDTO ConvertToDTO(this DocumentType documentTypeDTO)
