@@ -18,4 +18,8 @@ public class DocumentDTO
     public string CreatedBy { get; set; }
     [Required]
     public int DocumentTypeId { get; set; }
+    [Required]
+    public DateTime CreateDate { get; set; }
+    [Required]
+    public DateTime Deadline { get; set; }
 }

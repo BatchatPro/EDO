@@ -36,7 +36,10 @@ public class DocumentsController : ControllerBase
                 Description = x.Description,
                 DocumentTypeId = x.DocumentTypeId,
                 FilePath = x.FilePath,
-                CreatedBy = x.CreatedBy
+                CreatedBy = x.CreatedBy,
+                Deadline = x.Deadline,
+                CreateDate = x.CreateDate,
+                Status = x.Status
             }).ToListAsync());
 
         var userName = _userManager.GetUserId(User);
@@ -51,7 +54,10 @@ public class DocumentsController : ControllerBase
             Description = x.Description,
             DocumentTypeId = x.DocumentTypeId,
             FilePath = x.FilePath,
-            CreatedBy = x.CreatedBy
+            CreatedBy = x.CreatedBy,
+            Deadline = x.Deadline,
+            CreateDate = x.CreateDate,
+            Status = x.Status
         })
         .ToListAsync();
 
