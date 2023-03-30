@@ -150,27 +150,31 @@ public class AdmintrationController : ControllerBase
     [Authorize(Roles = RoleConst.STUFF)]
     [HttpPost]
     [Route("User/ChangeUser")]
-    public async Task<IActionResult> ChangeUser([FromBody]ApplicationUserDTO userDTO)
+    public async Task<IActionResult> ChangeUser([FromBody]UpdateProfileDTO userDTO)
     {
-        try
-        {
-            ApplicationUser user = await _userManager.FindByIdAsync(userDTO.Id);
-            if (user == null)
-                return NotFound();
-            user.LastName = userDTO.LastName;
-            user.FirstName = userDTO.FirstName;
-            user.PhoneNumber = userDTO.PhoneNumber;
-            user.Email = userDTO.Email;
-            var result = await _userManager.UpdateAsync(user);
-            if (!result.Succeeded)
-                return BadRequest(new { Successful = false, Errors = result.Errors.Select(x => x.Description) });
+        var userName = _userManager.GetUserId(User);
+        var _user = await _userManager.FindByNameAsync(userName);
+        if (_user.Id == null || !User.IsInRole(RoleConst.ADMIN))
+            return Forbid();
 
-            return Ok(user.ConvertToDTO());
-        }
-        catch (Exception ex)
+        ApplicationUser user = await _userManager.FindByIdAsync(userDTO.Id);
+        if (user == null)
+            return NotFound();
+        user.LastName = userDTO.LastName;
+        user.FirstName = userDTO.FirstName;
+        user.PhoneNumber = userDTO.PhoneNumber;
+        user.Email = userDTO.Email;
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+            return BadRequest(new { Successful = false, Errors = result.Errors.Select(x => x.Description) });
+
+        if (userDTO.Password == userDTO.ConfirmPassword && user != null)
         {
-            return BadRequest(ex.Message);
+            await _userManager.RemovePasswordAsync(user);
+            await _userManager.AddPasswordAsync(user, userDTO.Password);
         }
+
+        return Ok(user.ConvertToDTO());
     }
 }
 
