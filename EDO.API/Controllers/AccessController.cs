@@ -56,6 +56,13 @@ public class AccessController : Controller
                 email = user.Email,
                 userName = user.UserName,
                 userFullName = String.Format("{0} {1}", user.LastName, user.FirstName),
+
+                // Add Axrorbek
+                lastname = user.LastName,
+                firstname = user.FirstName,
+                phonenumber = user.PhoneNumber,
+                // Axrorbek
+
                 access = roles,
             });
         }
