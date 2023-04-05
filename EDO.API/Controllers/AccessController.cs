@@ -55,14 +55,10 @@ public class AccessController : Controller
                 userKey = user.Id,
                 email = user.Email,
                 userName = user.UserName,
-                userFullName = String.Format("{0} {1}", user.LastName, user.FirstName),
-
-                // Add Axrorbek
+                //userFullName = String.Format("{0} {1}", user.LastName, user.FirstName),
                 lastname = user.LastName,
                 firstname = user.FirstName,
                 phonenumber = user.PhoneNumber,
-                // Axrorbek
-
                 access = roles,
             });
         }
