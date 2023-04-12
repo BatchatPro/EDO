@@ -1,9 +1,12 @@
-﻿using EDO.Domain;
+﻿using EDO.Database.Models.AccessReferences;
+using EDO.Domain;
 
 namespace EDO.Database.Models;
 
 public class DocumentUser: BaseEntity
 {
-    public Guid UserId { get; set; }
+    public string UserId { get; set; }
     public int DocumentId { get; set; }
+    public ApplicationUserReference User { get; set; }
+    public Document Document { get; set; }
 }

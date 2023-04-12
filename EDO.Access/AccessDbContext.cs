@@ -1,10 +1,11 @@
 ﻿using EDO.Access.Models;
+using EDO.Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EDO.Access
 {
-    public class AccessDbContext:IdentityDbContext<ApplicationUser,ApplicationRole,string>
+    public class AccessDbContext:IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         public AccessDbContext(DbContextOptions<AccessDbContext> options) : base(options)
         {

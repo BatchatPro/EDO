@@ -13,4 +13,6 @@ public class Document:BaseEntity
     public int DocumentTypeId { get; set; }
     [AllowNull]
     public DocumentType? DocumentType { get; set; }
+
+    public List<DocumentUser> DocumentUsers { get; set; } = new(); 
 }
