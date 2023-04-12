@@ -22,4 +22,5 @@ public class DocumentDTO
     public DateTime CreateDate { get; set; }
     [Required]
     public DateTime Deadline { get; set; }
+    public List<string>? AttachedPeople { get; set; }
 }
