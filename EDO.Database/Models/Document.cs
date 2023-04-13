@@ -12,7 +12,7 @@ public class Document:BaseEntity
     public DateTime Deadline { get; set; } = DateTime.Now + new TimeSpan(5, 0, 0, 0);
     public int DocumentTypeId { get; set; }
     [AllowNull]
-    public DocumentType? DocumentType { get; set; }
 
+    public DocumentType? DocumentType { get; set; }
     public List<DocumentUser> DocumentUsers { get; set; } = new(); 
 }

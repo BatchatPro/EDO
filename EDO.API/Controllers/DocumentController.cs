@@ -37,13 +37,19 @@ public class DocumentsController : ControllerBase
                     Id = d.Id,
                     Name = d.Name,
                     Description = d.Description,
+                    DocumentTypeId = d.DocumentTypeId,
                     FilePath = d.FilePath,
+                    Deadline = d.Deadline,
                     Status = d.Status,
                     CreatedBy = d.CreatedBy,
-                    DocumentTypeId = d.DocumentTypeId,
+                    UpdatedBy = d.UpdatedBy,
                     CreateDate = d.CreateDate,
-                    Deadline = d.Deadline,
-                    AttachedPeople = d.DocumentUsers.Select(du => du.User.UserName).ToList()
+                    UpdateDate = d.UpdateDate,
+                    AttachedPeople = d.DocumentUsers.Select(du => new UserDTO
+                    {
+                        UserName = du.User.UserName,
+                        FullName = $"{du.User.FirstName} {du.User.LastName}"
+                    }).ToList()
                 }).ToList());
 
         var userName = _userManager.GetUserId(User);
@@ -58,13 +64,19 @@ public class DocumentsController : ControllerBase
                 Id = d.Id,
                 Name = d.Name,
                 Description = d.Description,
+                DocumentTypeId = d.DocumentTypeId,
                 FilePath = d.FilePath,
+                Deadline = d.Deadline,
                 Status = d.Status,
                 CreatedBy = d.CreatedBy,
-                DocumentTypeId = d.DocumentTypeId,
+                UpdatedBy = d.UpdatedBy,
                 CreateDate = d.CreateDate,
-                Deadline = d.Deadline,
-                AttachedPeople = d.DocumentUsers.Select(du => du.User.UserName).ToList()
+                UpdateDate = d.UpdateDate,
+                AttachedPeople = d.DocumentUsers.Select(du => new UserDTO
+                {
+                    UserName = du.User.UserName,
+                    FullName = $"{du.User.FirstName} {du.User.LastName}"
+                }).ToList()
             }).ToList();
 
         return Ok(documents);
@@ -111,17 +123,49 @@ public class DocumentsController : ControllerBase
     //}
 
 
-    //// GET: api/Documents/5
-    //[HttpGet("{id}")]
-    //public async Task<ActionResult<DocumentDTO>> GetDocument(int id)
-    //{
-    //    if (!User.IsInRole(RoleConst.ADMIN) && !await IsAuthor(id))
-    //        return Forbid();
+    // GET: api/Documents/5
+    
+    [HttpGet("{id}")]
+    public async Task<ActionResult<DocumentDTO>> GetDocument(int id)
+    {
+        if (!User.IsInRole(RoleConst.ADMIN) && !await IsAuthor(id))
+            return Forbid();
 
-    //    var document = await _context.Documents.FindAsync(id);
+        //var document = await _context.Documents.FindAsync(id);
+        var document = await _context.Documents
+        .Include(d => d.DocumentType)
+        .Include(d => d.DocumentUsers)
+            .ThenInclude(du => du.User)
+        .FirstOrDefaultAsync(d => d.Id == id);
 
-    //    return (document == null) ? NotFound($"Not Found element with this id: {id}") : document.ConvertToDTO();
-    //}
+        if (document == null)
+            return NotFound();
+
+        var attachedPeople = new List<UserDTO>();
+        foreach (var documentUser in document.DocumentUsers)
+            attachedPeople.Add(new UserDTO
+            {
+                UserName = documentUser.User.UserName,
+                FullName = $"{documentUser.User.FirstName} {documentUser.User.LastName}"
+            });
+
+        var documentDto = new DocumentDTO
+        {
+            Id = document.Id,
+            Name = document.Name,
+            Description = document.Description,
+            DocumentTypeId = document.DocumentTypeId,
+            FilePath = document.FilePath,
+            Deadline = document.Deadline,
+            Status = document.Status,
+            CreatedBy = document.CreatedBy,
+            UpdatedBy = document.UpdatedBy,
+            CreateDate = document.CreateDate,
+            UpdateDate = document.UpdateDate,
+            AttachedPeople = attachedPeople
+        };
+        return Ok(documentDto);
+    }
 
     //// PUT: api/Documents
     //[HttpPut]
