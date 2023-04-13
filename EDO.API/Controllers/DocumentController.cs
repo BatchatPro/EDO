@@ -1,5 +1,7 @@
 ﻿using EDO.Access.Models;
 using EDO.Database;
+using EDO.Database.Models;
+using EDO.Database.Models.AccessReferences;
 using EDO.Service.Mapper;
 using EDO.Shared;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +9,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Immutable;
 
 namespace EDO.API.Controllers;
 
@@ -47,6 +50,7 @@ public class DocumentsController : ControllerBase
                     UpdateDate = d.UpdateDate,
                     AttachedPeople = d.DocumentUsers.Select(du => new UserDTO
                     {
+                        Id = du.User.Id,
                         UserName = du.User.UserName,
                         FullName = $"{du.User.FirstName} {du.User.LastName}"
                     }).ToList()
@@ -74,6 +78,7 @@ public class DocumentsController : ControllerBase
                 UpdateDate = d.UpdateDate,
                 AttachedPeople = d.DocumentUsers.Select(du => new UserDTO
                 {
+                    Id = du.User.Id,
                     UserName = du.User.UserName,
                     FullName = $"{du.User.FirstName} {du.User.LastName}"
                 }).ToList()
@@ -145,6 +150,7 @@ public class DocumentsController : ControllerBase
         foreach (var documentUser in document.DocumentUsers)
             attachedPeople.Add(new UserDTO
             {
+                Id = documentUser.User.Id,
                 UserName = documentUser.User.UserName,
                 FullName = $"{documentUser.User.FirstName} {documentUser.User.LastName}"
             });
@@ -187,6 +193,82 @@ public class DocumentsController : ControllerBase
 
     //    return Ok(document);
     //}
+
+    // POST: api/Documents
+    [HttpPost]
+    public async Task<ActionResult<DocumentDTO>> PostDocument(DocumentDTO documentDTO)
+    {
+        var userName = _userManager.GetUserId(User);
+        var createdBy = await _userManager.FindByNameAsync(userName);
+        //var createdBy = await _userManager.GetUserAsync(HttpContext.User);
+        if (createdBy == null)
+            return BadRequest("Invalid user. 123");
+
+        var attachedPeople = new List<UserDTO>();
+        if (documentDTO.AttachedPeople != null)
+        {
+            foreach (var userDTO in documentDTO.AttachedPeople)
+            {
+                var user = await _context.ApplicationUserReferences.FindAsync(userDTO.Id);
+                if (user != null)
+                attachedPeople.Add(new UserDTO
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    FullName = user.FirstName+" "+ user.LastName
+                });
+            }
+        }
+
+        var document = new Document
+        {
+            Name = documentDTO.Name,
+            Description = documentDTO.Description,
+            DocumentTypeId = documentDTO.DocumentTypeId,
+            FilePath = documentDTO.FilePath,
+            Deadline = documentDTO.Deadline,
+            Status = documentDTO.Status,
+            CreatedBy = createdBy.UserName,
+            CreateDate = DateTime.Now,
+            DocumentUsers = new List<DocumentUser>()
+        };
+
+
+        foreach (UserDTO userDTO in attachedPeople)
+        {
+            var user =  await _context.ApplicationUserReferences.FindAsync(userDTO.Id);
+            var documentUser = new DocumentUser
+            {
+                User = user,
+                CreatedBy = createdBy.UserName,
+                CreateDate = DateTime.Now,
+                Document = document
+            };
+            document.DocumentUsers.Add(documentUser);
+        }
+
+        _context.Documents.Add(document);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetDocument), new { id = document.Id }, new DocumentDTO
+        {
+            Id = document.Id,
+            Name = document.Name,
+            Description = document.Description,
+            FilePath = document.FilePath,
+            Status = document.Status,
+            CreatedBy = document.CreatedBy,
+            DocumentTypeId = document.DocumentTypeId,
+            CreateDate = document.CreateDate,
+            Deadline = document.Deadline,
+            AttachedPeople = attachedPeople.Select(u => new UserDTO
+            {
+                Id = u.Id,
+                UserName = u.UserName,
+                FullName = u.FullName
+            }).ToList()
+        });
+    }
 
     //// POST: api/Documents
     //[HttpPost]
