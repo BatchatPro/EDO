@@ -154,7 +154,7 @@ public class AdmintrationController : ControllerBase
     {
         var userName = _userManager.GetUserId(User);
         var _user = await _userManager.FindByNameAsync(userName);
-        if (_user.Id == null || !User.IsInRole(RoleConst.ADMIN))
+        if (_user.Id == null || (!User.IsInRole(RoleConst.ADMIN) && _user.Id != userDTO.Id))
             return Forbid();
 
         ApplicationUser user = await _userManager.FindByIdAsync(userDTO.Id);

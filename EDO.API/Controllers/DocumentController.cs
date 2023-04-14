@@ -173,6 +173,77 @@ public class DocumentsController : ControllerBase
         return Ok(documentDto);
     }
 
+
+    [HttpPut]
+    public async Task<IActionResult> UpdateDocument(DocumentDTO documentDTO)
+    {
+        var userName = _userManager.GetUserId(User);
+        var updateBy = await _userManager.FindByNameAsync(userName);
+
+        if (updateBy == null)
+            return BadRequest("Invalid user. User didn't fild in Users.");
+
+        var document = await _context.Documents.Include(d => d.DocumentUsers)
+            .ThenInclude(du => du.User)
+            .SingleOrDefaultAsync(d => d.Id == documentDTO.Id);
+
+        if (document == null)
+            return NotFound();
+
+        document.Name = documentDTO.Name;
+        document.Description = documentDTO.Description;
+        document.DocumentTypeId = documentDTO.DocumentTypeId;
+        document.FilePath = documentDTO.FilePath;
+        document.Deadline = documentDTO.Deadline;
+        document.Status = documentDTO.Status;
+        document.UpdatedBy = updateBy.Id;
+        document.UpdateDate = DateTime.Now;
+
+        // update attached people
+        var attachedPeople = new List<UserDTO>();
+        if (documentDTO.AttachedPeople != null)
+        {
+            foreach (var userDTO in documentDTO.AttachedPeople)
+            {
+                var user = await _context.ApplicationUserReferences.FindAsync(userDTO.Id);
+                if (user != null)
+                {
+                    attachedPeople.Add(new UserDTO
+                    {
+                        Id = user.Id,
+                        UserName = user.UserName,
+                        FullName = user.FirstName + " " + user.LastName
+                    });
+
+                    // Add new DocumentUser relationship if not already exists
+                    var existingRelationship = document.DocumentUsers.SingleOrDefault(du => du.UserId == user.Id);
+                    if (existingRelationship == null)
+                    {
+                        var newRelationship = new DocumentUser
+                        {
+                            User = user,
+                            CreatedBy = updateBy.UserName,
+                            CreateDate = DateTime.Now,
+                            Document = document
+                        };
+                        document.DocumentUsers.Add(newRelationship);
+                    }
+                }
+            }
+
+            var removedUsers = document.DocumentUsers.Where(du => !attachedPeople.Any(ap => ap.Id == du.UserId)).ToList();
+            foreach (var removedUser in removedUsers)
+            {
+                document.DocumentUsers.Remove(removedUser);
+
+                _context.DocumentUsers.Remove(removedUser);
+            }
+
+        }
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
     //// PUT: api/Documents
     //[HttpPut]
     //public async Task<IActionResult> PutDocument(DocumentDTO document)
@@ -202,7 +273,7 @@ public class DocumentsController : ControllerBase
         var createdBy = await _userManager.FindByNameAsync(userName);
         //var createdBy = await _userManager.GetUserAsync(HttpContext.User);
         if (createdBy == null)
-            return BadRequest("Invalid user. 123");
+            return BadRequest("Invalid user. User didn't fild in Users.");
 
         var attachedPeople = new List<UserDTO>();
         if (documentDTO.AttachedPeople != null)
@@ -228,7 +299,7 @@ public class DocumentsController : ControllerBase
             FilePath = documentDTO.FilePath,
             Deadline = documentDTO.Deadline,
             Status = documentDTO.Status,
-            CreatedBy = createdBy.UserName,
+            CreatedBy = createdBy.Id,
             CreateDate = DateTime.Now,
             DocumentUsers = new List<DocumentUser>()
         };
@@ -240,7 +311,7 @@ public class DocumentsController : ControllerBase
             var documentUser = new DocumentUser
             {
                 User = user,
-                CreatedBy = createdBy.UserName,
+                CreatedBy = createdBy.Id,
                 CreateDate = DateTime.Now,
                 Document = document
             };
@@ -283,6 +354,30 @@ public class DocumentsController : ControllerBase
 
     //    return CreatedAtAction(nameof(GetDocument), new { id = document.Id }, document);
     //}
+
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteDocument(int id)
+    {
+        var document = await _context.Documents.FindAsync(id);
+
+        if (document == null)
+        {
+            return NotFound();
+        }
+
+        // Remove associated DocumentUser records
+        var documentUsers = _context.DocumentUsers.Where(du => du.DocumentId == id);
+        _context.DocumentUsers.RemoveRange(documentUsers);
+
+        // Remove the document
+        _context.Documents.Remove(document);
+
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
 
     //// DELETE: api/Documents/5
     //[HttpDelete("{id}")]
