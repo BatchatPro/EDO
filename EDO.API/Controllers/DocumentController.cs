@@ -356,9 +356,11 @@ public class DocumentsController : ControllerBase
     //}
 
 
+    [Authorize(Roles = RoleConst.ADMIN)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDocument(int id)
     {
+
         var document = await _context.Documents.FindAsync(id);
 
         if (document == null)
