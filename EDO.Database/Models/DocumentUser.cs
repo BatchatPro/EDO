@@ -5,7 +5,7 @@ namespace EDO.Database.Models;
 
 public class DocumentUser: BaseEntity
 {
-    public string AttachedStatus { get; set; } = "wating";
+    public string AttachedStatus { get; set; } = "waiting";
     public string UserId { get; set; }
     public int DocumentId { get; set; }
     public ApplicationUserReference User { get; set; }
