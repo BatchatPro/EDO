@@ -56,6 +56,7 @@ public class AdmintrationController : ControllerBase
                 Email = userDTO.Email,
                 FirstName = userDTO.FirstName,
                 LastName = userDTO.LastName,
+                ThirdName = userDTO.ThirdName,
                 PhoneNumber = userDTO.PhoneNumber
             };
             var result = await _userManager.CreateAsync(user, userDTO.Password);
@@ -162,6 +163,7 @@ public class AdmintrationController : ControllerBase
             return NotFound();
         user.LastName = userDTO.LastName;
         user.FirstName = userDTO.FirstName;
+        user.ThirdName = userDTO.ThirdName;
         user.PhoneNumber = userDTO.PhoneNumber;
         user.Email = userDTO.Email;
         var result = await _userManager.UpdateAsync(user);
