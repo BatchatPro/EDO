@@ -9,4 +9,6 @@ public class ApplicationUser : IdentityUser
     public string? LastName { get; set; }
     [AllowNull]
     public string? FirstName { get; set; }
+    [AllowNull]
+    public string? ThirdName { get; set; }
 }

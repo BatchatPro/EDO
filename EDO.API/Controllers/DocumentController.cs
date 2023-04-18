@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
+using System.Linq;
 
 namespace EDO.API.Controllers;
 
@@ -27,7 +28,6 @@ public class DocumentsController : ControllerBase
         this._userManager = userManager;
     }
 
-    // GET: api/Documents
     [HttpGet]
     public async Task<ActionResult<IEnumerable<DocumentDTO>>> GetDocuments()
     {
@@ -80,55 +80,14 @@ public class DocumentsController : ControllerBase
                 {
                     Id = du.User.Id,
                     UserName = du.User.UserName,
-                    FullName = $"{du.User.FirstName} {du.User.LastName}"
+                    FullName = $"{du.User.FirstName} {du.User.LastName}",
+                    AttachedStatus = du.AttachedStatus
                 }).ToList()
             }).ToList();
 
         return Ok(documents);
     }
 
-    //// GET: api/Documents
-    //[HttpGet]
-    //public async Task<ActionResult<IEnumerable<DocumentDTO>>> GetDocuments()
-    //{
-    //    if (User.IsInRole(RoleConst.ADMIN))
-    //        return (_context.Documents == null) ? NotFound() : (await _context.Documents.Select(x => new DocumentDTO
-    //        {
-    //            Id = x.Id,
-    //            Name = x.Name,
-    //            Description = x.Description,
-    //            DocumentTypeId = x.DocumentTypeId,
-    //            FilePath = x.FilePath,
-    //            CreatedBy = x.CreatedBy,
-    //            Deadline = x.Deadline,
-    //            CreateDate = x.CreateDate,
-    //            Status = x.Status,
-    //        }).ToListAsync());
-
-    //    var userName = _userManager.GetUserId(User);
-    //    var user = await _userManager.FindByNameAsync(userName);
-
-    //    var documents = await _context.Documents
-    //    .Where(d => d.CreatedBy == user.Id)
-    //    .Select(x => new DocumentDTO
-    //    {
-    //        Id = x.Id,
-    //        Name = x.Name,
-    //        Description = x.Description,
-    //        DocumentTypeId = x.DocumentTypeId,
-    //        FilePath = x.FilePath,
-    //        CreatedBy = x.CreatedBy,
-    //        Deadline = x.Deadline,
-    //        CreateDate = x.CreateDate,
-    //        Status = x.Status
-    //    })
-    //    .ToListAsync();
-
-    //    return Ok(documents);
-    //}
-
-
-    // GET: api/Documents/5
     
     [HttpGet("{id}")]
     public async Task<ActionResult<DocumentDTO>> GetDocument(int id)
@@ -140,7 +99,7 @@ public class DocumentsController : ControllerBase
         var document = await _context.Documents
         .Include(d => d.DocumentType)
         .Include(d => d.DocumentUsers)
-            .ThenInclude(du => du.User)
+        .ThenInclude(du => du.User)
         .FirstOrDefaultAsync(d => d.Id == id);
 
         if (document == null)
@@ -152,7 +111,8 @@ public class DocumentsController : ControllerBase
             {
                 Id = documentUser.User.Id,
                 UserName = documentUser.User.UserName,
-                FullName = $"{documentUser.User.FirstName} {documentUser.User.LastName}"
+                FullName = $"{documentUser.User.FirstName} {documentUser.User.LastName}",
+                AttachedStatus = documentUser.AttachedStatus
             });
 
         var documentDto = new DocumentDTO
@@ -171,6 +131,42 @@ public class DocumentsController : ControllerBase
             AttachedPeople = attachedPeople
         };
         return Ok(documentDto);
+    }
+
+
+    [Route("AttachedDocuments")]
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<DocumentDTO>>> GetAttachedUsers()
+    {
+        var userName = _userManager.GetUserId(User);
+        var attachedUser = await _userManager.FindByNameAsync(userName);
+
+        if (attachedUser == null)
+            return BadRequest("Invalid user. User didn't fild in Users.");
+
+        var documents = _context.Documents.Include(d => d.DocumentUsers).Where(d => d.DocumentUsers.Any(du => du.UserId == attachedUser.Id)).Select(d => new DocumentDTO
+        {
+            Id = d.Id,
+            Name = d.Name,
+            Description = d.Description,
+            DocumentTypeId = d.DocumentTypeId,
+            FilePath = d.FilePath,
+            Deadline = d.Deadline,
+            Status = d.Status,
+            CreatedBy = d.CreatedBy,
+            UpdatedBy = d.UpdatedBy,
+            CreateDate = d.CreateDate,
+            UpdateDate = d.UpdateDate,
+            AttachedPeople = d.DocumentUsers.Select(du => new UserDTO
+            {
+                Id = du.User.Id,
+                UserName = du.User.UserName,
+                FullName = $"{du.User.FirstName} {du.User.LastName}",
+                AttachedStatus = du.AttachedStatus
+            }).ToList()
+        }).ToList();
+        
+        return (documents == null) ? NotFound():  Ok(documents);
     }
 
 
@@ -212,7 +208,7 @@ public class DocumentsController : ControllerBase
                     {
                         Id = user.Id,
                         UserName = user.UserName,
-                        FullName = user.FirstName + " " + user.LastName
+                        FullName = user.FirstName + " " + user.LastName,
                     });
 
                     // Add new DocumentUser relationship if not already exists
@@ -244,28 +240,30 @@ public class DocumentsController : ControllerBase
 
         return NoContent();
     }
-    //// PUT: api/Documents
-    //[HttpPut]
-    //public async Task<IActionResult> PutDocument(DocumentDTO document)
-    //{
-    //    if (!DocumentExists(document.Id))
-    //        return NotFound($"Not Found element with this id: {document.Id}");
 
-    //    if (!User.IsInRole(RoleConst.ADMIN) && !await IsAuthor(document.Id))
-    //        return Forbid();
 
-    //    var userName = _userManager.GetUserId(User);
-    //    var user = await _userManager.FindByNameAsync(userName);
+    [Route("ChackDocument")]
+    [HttpPut]
+    public async Task<IActionResult> ChackDocumeUser(DocumentUserChackDTO chackDocumeUser)
+    {
+        var userName = _userManager.GetUserId(User);
+        var user = await _userManager.FindByNameAsync(userName);
 
-    //    document.CreatedBy = user.Id;
 
-    //    _context.Documents.Update(document.ConvertToEntity());
-    //    await _context.SaveChangesAsync();
+        if (user == null)
+            return BadRequest("Invalid user. User didn't fild in Users.");
 
-    //    return Ok(document);
-    //}
+        var chackDocument = _context.DocumentUsers.Where(d => d.UserId == user.Id && d.DocumentId == chackDocumeUser.DocumentId).FirstOrDefault();
 
-    // POST: api/Documents
+        if (chackDocument == null)
+            return NotFound();
+
+        chackDocument.AttachedStatus = chackDocumeUser.AttachedStatus;
+        await _context.SaveChangesAsync();
+
+        return Ok(chackDocumeUser);
+    }
+
     [HttpPost]
     public async Task<ActionResult<DocumentDTO>> PostDocument(DocumentDTO documentDTO)
     {
@@ -341,20 +339,6 @@ public class DocumentsController : ControllerBase
         });
     }
 
-    //// POST: api/Documents
-    //[HttpPost]
-    //public async Task<ActionResult<DocumentDTO>> PostDocument(DocumentDTO document)
-    //{
-    //    var userName = _userManager.GetUserId(User);
-    //    var user = await _userManager.FindByNameAsync(userName);
-
-    //    document.CreatedBy = user.Id;
-    //    _context.Documents.Add(document.ConvertToEntity());
-    //    await _context.SaveChangesAsync();
-
-    //    return CreatedAtAction(nameof(GetDocument), new { id = document.Id }, document);
-    //}
-
 
     [Authorize(Roles = RoleConst.ADMIN)]
     [HttpDelete("{id}")]
@@ -381,27 +365,11 @@ public class DocumentsController : ControllerBase
     }
 
 
-    //// DELETE: api/Documents/5
-    //[HttpDelete("{id}")]
-    //public async Task<ActionResult<DocumentDTO>> DeleteDocument(int id)
-    //{
-    //    if (!User.IsInRole(RoleConst.ADMIN) && !await IsAuthor(id))
-    //        return Forbid();
-
-    //    var document = await _context.Documents.FindAsync(id);
-    //    if (document == null)
-    //        return NotFound($"Not Found Element with this id: {id}");
-
-    //    _context.Documents.Remove(document);
-    //    await _context.SaveChangesAsync();
-
-    //    return NotFound();
-    //}
-
     private bool DocumentExists(int id)
     {
         return _context.Documents.Any(e => e.Id == id);
     }
+
 
     private async Task<bool> IsAuthor(int documentId)
     {

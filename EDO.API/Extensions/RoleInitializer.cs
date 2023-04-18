@@ -6,8 +6,8 @@ public class RoleInitializer
 {
     public static async Task InitializeAsync(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
     {
-        string adminEmail = "goblindev@gmail.com";
-        string adminPassword = "abdu123456";
+        string adminEmail = "goblindev";
+        string adminPassword = "12345678a";
 
         var roles = new Dictionary<string, string>()
             {
@@ -33,7 +33,7 @@ public class RoleInitializer
 
         else
         {
-            user = new ApplicationUser { LastName = "Nabijonov", FirstName = "Abdulaziz", Email = adminEmail, UserName = adminEmail };
+            user = new ApplicationUser { LastName = "Nabijonov", FirstName = "Abdulaziz",ThirdName = "Axroriddin o'g'li", PhoneNumber="+998932505255", Email = adminEmail, UserName = adminEmail };
             IdentityResult result = await userManager.CreateAsync(user, adminPassword);
             if (result.Succeeded)
             {

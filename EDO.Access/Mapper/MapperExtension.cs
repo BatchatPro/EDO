@@ -11,9 +11,10 @@ public static class MapperExtension
             return null;
         return new ApplicationUserDTO()
         {
+            Id = applicationUser.Id,
             Email = applicationUser.Email,
             FirstName = applicationUser.FirstName,
-            Id = applicationUser.Id,
+            ThirdName = applicationUser.ThirdName,
             LastName = applicationUser.LastName,
             PhoneNumber = applicationUser.PhoneNumber,
             UserName = applicationUser.UserName
@@ -27,8 +28,9 @@ public static class MapperExtension
         {
             Id = applicationUserDTO.Id,
             UserName = applicationUserDTO.UserName,
-            LastName = applicationUserDTO.LastName,
             FirstName = applicationUserDTO.FirstName,
+            LastName = applicationUserDTO.LastName,
+            ThirdName = applicationUserDTO.ThirdName,
             Email = applicationUserDTO.Email,
             PhoneNumber = applicationUserDTO.PhoneNumber,
         };
@@ -40,8 +42,9 @@ public static class MapperExtension
         return new ApplicationUser()
         {
             UserName = registrationUserDTO.UserName,
-            LastName = registrationUserDTO.LastName,
             FirstName = registrationUserDTO.FirstName,
+            LastName = registrationUserDTO.LastName,
+            ThirdName = registrationUserDTO.ThirdName,
             Email = registrationUserDTO.Email,
             PhoneNumber = registrationUserDTO.PhoneNumber,
         };
@@ -49,20 +52,22 @@ public static class MapperExtension
     public static IEnumerable<ApplicationUser> ConvertToEntity(this IEnumerable<ApplicationUserDTO> statusDTO) =>
         statusDTO.Select(applicationUser => new ApplicationUser
         {
+            Id = applicationUser.Id,
             Email = applicationUser.Email,
             FirstName = applicationUser.FirstName,
-            Id = applicationUser.Id,
             LastName = applicationUser.LastName,
+            ThirdName= applicationUser.ThirdName,
             PhoneNumber = applicationUser.PhoneNumber,
             UserName = applicationUser.UserName
         });
     public static IEnumerable<ApplicationUserDTO> ConvertToDTO(this IEnumerable<ApplicationUser> statusDTO) =>
         statusDTO.Select(applicationUser => new ApplicationUserDTO
         {
+            Id = applicationUser.Id,
             Email = applicationUser.Email,
             FirstName = applicationUser.FirstName,
-            Id = applicationUser.Id,
             LastName = applicationUser.LastName,
+            ThirdName = applicationUser.ThirdName,
             PhoneNumber = applicationUser.PhoneNumber,
             UserName = applicationUser.UserName,
         });

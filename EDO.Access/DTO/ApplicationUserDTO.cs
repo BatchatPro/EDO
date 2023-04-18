@@ -12,8 +12,10 @@ public class ApplicationUserDTO
     public string? LastName { get; set; }
     [Required(ErrorMessage = "This Field Requider!")]
     public string? FirstName { get; set; }
+    [Required(ErrorMessage = "This Field Requider!")]
+    public string? ThirdName { get; set; }
+    [Required(ErrorMessage = "This Field Requider!")]
+    public string PhoneNumber { get; set; }
     [AllowNull]
     public string? Email { get; set; }
-    [AllowNull]
-    public string? PhoneNumber { get; set; }
 }

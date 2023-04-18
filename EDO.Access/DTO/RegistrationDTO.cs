@@ -20,8 +20,10 @@ public class RegistrationDTO
     public string LastName { get; set; }
     [Required(ErrorMessage = "This Poly is Required.")]
     public string FirstName { get; set; }
+    [Required(ErrorMessage = "This Poly is Required.")]
+    public string ThirdName { get; set; }
     [AllowNull]
     public string? Email { get; set; }
     [Required(ErrorMessage = "This Poly is Required.")]
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; }
 }

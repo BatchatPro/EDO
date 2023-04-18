@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EDO.Database.Migrations
 {
     [DbContext(typeof(EdoDbContext))]
-    [Migration("20230412053901_004")]
-    partial class _004
+    [Migration("20230418104906_001")]
+    partial class _001
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,7 +94,7 @@ namespace EDO.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
@@ -143,7 +143,7 @@ namespace EDO.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
@@ -176,7 +176,11 @@ namespace EDO.Database.Migrations
                     b.Property<int>("DocumentId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<string>("AttachedStatus")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
