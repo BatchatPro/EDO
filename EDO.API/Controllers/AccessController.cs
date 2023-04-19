@@ -55,10 +55,10 @@ public class AccessController : Controller
                 userKey = user.Id,
                 email = user.Email,
                 userName = user.UserName,
-                //userFullName = String.Format("{0} {1}", user.LastName, user.FirstName),
-                lastname = user.LastName,
-                firstname = user.FirstName,
-                phonenumber = user.PhoneNumber,
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                middleName = user.ThirdName,
+                phoneNumber = user.PhoneNumber,
                 access = roles,
             });
         }
@@ -89,8 +89,9 @@ public class AccessController : Controller
         ApplicationUser applicationUser = new ApplicationUser()
         {
             UserName = registrationDTO.UserName,
-            LastName = registrationDTO.LastName,
             FirstName = registrationDTO.FirstName,
+            LastName = registrationDTO.LastName,
+            ThirdName = registrationDTO.ThirdName,
             Email = registrationDTO.Email,
             PhoneNumber = registrationDTO.PhoneNumber
         };
