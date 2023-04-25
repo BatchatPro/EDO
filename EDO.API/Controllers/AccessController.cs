@@ -57,7 +57,7 @@ public class AccessController : Controller
                 userName = user.UserName,
                 firstName = user.FirstName,
                 lastName = user.LastName,
-                middleName = user.ThirdName,
+                thirdName = user.ThirdName,
                 phoneNumber = user.PhoneNumber,
                 access = roles,
             });

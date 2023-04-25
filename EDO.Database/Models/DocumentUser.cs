@@ -11,3 +11,4 @@ public class DocumentUser: BaseEntity
     public ApplicationUserReference User { get; set; }
     public Document Document { get; set; }
 }
+    
