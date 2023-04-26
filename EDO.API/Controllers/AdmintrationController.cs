@@ -22,7 +22,7 @@ public class AdmintrationController : ControllerBase
         this._roleManager = roleManager;
     }
 
-    [Authorize(Roles = RoleConst.ADMIN)]
+    [Authorize(Roles = RoleConst.STUFF)]
     [HttpGet]
     [Route("User/GetAll")]
     public async Task<IActionResult> GetAll() => Ok((await _userManager.Users.ToListAsync()).ConvertToDTO());
