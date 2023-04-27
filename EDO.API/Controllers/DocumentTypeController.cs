@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EDO.API.Controllers;
 
-[Authorize(Roles = RoleConst.MAIN)]
+[Authorize(Roles = RoleConst.STUFF)]
 [Route("api/[controller]")]
 [ApiController]
 public class DocumentTypeController : ControllerBase
@@ -42,6 +42,7 @@ public class DocumentTypeController : ControllerBase
     }
 
     // PUT: api/DocumentTypes
+    [Authorize(Roles = RoleConst.MAIN)]
     [HttpPut]
     public async Task<IActionResult> PutDocumentType(DocumentTypeDTO documentType)
     {
@@ -55,6 +56,7 @@ public class DocumentTypeController : ControllerBase
     }
 
     // POST: api/DocumentTypes
+    [Authorize(Roles = RoleConst.MAIN)]
     [HttpPost]
     public async Task<ActionResult<DocumentType>> PostDocumentType(DocumentTypeDTO documentType)
     {
@@ -65,6 +67,7 @@ public class DocumentTypeController : ControllerBase
     }
 
     // DELETE: api/DocumentTypes/5
+    [Authorize(Roles = RoleConst.MAIN)]
     [HttpDelete("{id}")]
     public async Task<ActionResult<DocumentTypeDTO>> DeleteDocumentType(int id)
     {
